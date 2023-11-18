@@ -1,0 +1,44 @@
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Angular
+/out-tsc
+/bazel-out
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# Visual Studio Code
+.vscode/
+.history/
+.idea/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Server
+/logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+/coverage
+/.nyc_output
+
+# Server IDE - VSCode
+.idea/
+.history/
+.vscode/
+
+client/
+server/
+
