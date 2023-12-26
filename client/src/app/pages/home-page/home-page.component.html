@@ -1,0 +1,73 @@
+<div class="home">
+    <div class="home__header">
+        <h2 class="home__header__title">
+            All Questions
+        </h2>
+        <a 
+            routerLink="/askQuestion"
+            class="home__header__btn"
+        >
+            Ask a Question
+        </a>
+    </div>
+
+    <div class="home__questions">
+        @for(question of questionsService.questions.rows; track question.id){
+            <div class="home__questions__row">
+                <div class="home__questions__row__col">
+                    <div class="home__questions__row__col__line">
+                        0 votes
+                    </div>
+                    <div class="home__questions__row__col__line">
+                        0 answers
+                    </div>
+                    <div class="home__questions__row__col__line">
+                        4 views
+                    </div>
+                </div>
+
+                <div class="home__questions__row__col">
+                    <div 
+                        [routerLink]="'/question/' + question.id"
+                        class="home__questions__row__col__title"
+                    >
+                        {{ question.title }}
+                    </div>
+                    <div class="home__questions__row__col__desc">
+                        {{question.fullDescription}}
+                    </div>
+                    <div class="home__questions__row__col__info">
+                        <div class="home__questions__row__col__info__tags">
+                            <div class="home__questions__row__col__info__tags__btn">
+                                java
+                            </div>
+                            <div class="home__questions__row__col__info__tags__btn">
+                                swagger
+                            </div>
+                            <div class="home__questions__row__col__info__tags__btn">
+                                spring
+                            </div>
+                        </div>
+
+                        <div class="home__questions__row__col__info__user">
+                            <div class="home__questions__row__col__info__user__avatar">
+                                <img [src]=" question.user.avatar ? API_URL + '/' + question.user.avatar : '../../../assets/images/defaultAvatar.svg'">
+                            </div>
+                            <div class="home__questions__row__col__info__user__nickname">
+                                {{question.user.nickname}}
+                            </div>
+                            <div class="home__questions__row__col__info__user__asked">
+                                asked 1 min ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        } @empty {
+            <div>
+                No questions found
+            </div>
+        }
+    </div>
+</div>

@@ -24,7 +24,7 @@ export class Question extends Model<Question, QuestionCreationAttrs>{
     @Column({type: DataType.TEXT, unique: false, allowNull: false})
     fullDescription: string;
 
-    @ApiProperty({example: '', description: 'image'})
+    @ApiProperty({example: 'img', description: 'image'})
     @Column({type: DataType.STRING, allowNull: true})
     image: string;
 

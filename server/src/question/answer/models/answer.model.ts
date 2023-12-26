@@ -32,5 +32,8 @@ export class Answer extends Model<Answer, AnswerCreationAttrs>{
     questionId: number;
 
     @BelongsTo(() => Question)
-    question: Question
+    question: Question;
+
+    @BelongsTo(() => User)
+    user: User
 }

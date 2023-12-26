@@ -40,6 +40,27 @@ export function app(): express.Express {
       .catch((err) => next(err));
   });
 
+//   // All regular routes use the Angular engine
+//   server.get('*', (req, res, next) => {
+//     const { protocol, originalUrl, baseUrl, headers } = req;
+  
+//     // Check if the route should be server-side rendered
+//     if (originalUrl.startsWith('/question/')) {
+//       commonEngine
+//         .render({
+//           bootstrap,
+//           documentFilePath: indexHtml,
+//           url: `${protocol}://${headers.host}${originalUrl}`,
+//           publicPath: browserDistFolder,
+//           providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+//         })
+//         .then((html) => res.send(html))
+//         .catch((err) => next(err));
+//     } else {
+//       next();
+//     }
+//   });
+
   return server;
 }
 

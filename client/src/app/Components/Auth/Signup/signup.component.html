@@ -1,0 +1,127 @@
+<form 
+    [formGroup]="userData"
+    (ngSubmit)="onSubmit()"
+    class="auth__section__form">
+    <button 
+        class="auth__section__form__google auth__section__form--w" 
+    >
+        <img src="../../../assets/images/Authorization/google.svg" alt="G">
+        <span>Sign up with Google</span>
+    </button>
+
+    <div class="auth__section__form__row">
+        <div class="auth__section__form__row__title">
+            Nickname
+        </div>
+        <input 
+            formControlName="nickname"
+            required
+            class="auth__section__form__row__input auth__section__form--w"
+            type="text"
+        >
+        @if(userData.controls['nickname'].invalid 
+            && 
+            (userData.controls['nickname'].dirty || userData.controls['nickname'].touched) ) {
+
+            @if(userData.controls['nickname'].hasError('required')) {
+                <div class="auth__section__form__row__error">Nickname is required</div>
+            }
+            @if(userData.controls['nickname'].hasError('minlength') || userData.controls['nickname'].hasError('maxlength')) {
+                <div class="auth__section__form__row__error">Nickname must have 4-20 characters</div>
+            }
+        }
+    </div>
+
+    <div class="auth__section__form__row">
+        <div class="auth__section__form__row__title">
+            Email
+        </div>
+        <input 
+            formControlName="email"
+            required
+            class="auth__section__form__row__input auth__section__form--w"
+            type="email"
+        >
+
+        @if(userData.controls['email'].invalid 
+            && 
+            (userData.controls['email'].dirty || userData.controls['email'].touched) ) {
+
+            @if(userData.controls['email'].hasError('required')) {
+                <div class="auth__section__form__row__error">Email is required</div>
+            }
+            @if(userData.controls['email'].hasError('email')) {
+                <div class="auth__section__form__row__error">Please enter a valid email adress</div>
+            }
+        }
+    </div>
+
+    <div class="auth__section__form__row">
+        <div class="auth__section__form__row__title">
+            Password
+        </div>
+
+        <div class="password__container">
+            <input 
+                formControlName="password"
+                required
+                class="auth__section__form__row__input auth__section__form__row__input--password auth__section__form--w"
+                type="{{ isPasswordVisible ? 'text' : 'password' }}"
+            >
+            @if(userData.controls['password'].invalid 
+            && 
+            (userData.controls['password'].dirty || userData.controls['password'].touched) ) {
+
+                @if(userData.controls['password'].hasError('required')) {
+                    <div class="auth__section__form__row__error">Password is required</div>
+                }
+                @if(userData.controls['password'].hasError('minlength') || userData.controls['password'].hasError('maxlength')) {
+                    <div class="auth__section__form__row__error">Password must have 6-20 characters</div>
+                }
+            }
+            <div 
+                class="password__container__btn"
+                (click) = "isPasswordVisible = !isPasswordVisible"
+            >
+                <img src="../../../assets/images/Authorization/Eye.svg" alt="visible">
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="auth__section__form__row">
+        <div class="auth__section__form__row__title">
+            Confirm your password
+        </div>
+        <div class="password__container">
+            <input 
+                formControlName="confirmPassword"
+                required
+                class="auth__section__form__row__input auth__section__form__row__input--password auth__section__form--w"
+                type="{{ isConfirmPasswordVisible ? 'text' : 'password' }}"
+            >
+            @if(userData.controls['confirmPassword'].invalid 
+            && 
+            (userData.controls['confirmPassword'].dirty || userData.controls['confirmPassword'].touched) ) {
+
+                @if(userData.controls['confirmPassword'].hasError('required')) {
+                    <div class="auth__section__form__row__error">Password is required</div>
+                }
+                @if(userData.controls['confirmPassword'].hasError('minlength') || userData.controls['confirmPassword'].hasError('maxlength')) {
+                    <div class="auth__section__form__row__error">Password must have 6-20 characters</div>
+                }
+            }
+            <div 
+                class="password__container__btn"
+                (click) = "isConfirmPasswordVisible = !isConfirmPasswordVisible"
+            >
+                <img src="../../../assets/images/Authorization/Eye.svg" alt="visible">
+            </div>
+        </div>
+    </div>
+
+    <button 
+        [disabled]="!userData.valid"
+        class="auth__section__form__btn auth__section__form--w"
+    >Sign up</button>
+</form>

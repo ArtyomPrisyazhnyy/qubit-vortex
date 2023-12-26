@@ -1,0 +1,45 @@
+<div class="users">
+    <h2 class="users__title">
+        Users
+    </h2>
+
+    <div class="users__settings">
+        <div class="users__settings__search">
+            <button class="users__settings__search__btn">
+                <img src="../../../assets/images/usersPage/SVG.svg">
+            </button>
+            <input type="text" class="users__settings__search__input" placeholder="Search for users">
+        </div>
+
+        <div class="users__settings__sort">
+            <button class="users__settings__sort__btn">
+                New users
+            </button>
+            <button class="users__settings__sort__btn">
+                Like-minded
+            </button>
+            <button class="users__settings__sort__btn">
+                Editors
+            </button>
+        </div>
+    </div>
+
+    <div class="users__block">
+        @for(user of usersService.users; track user.id){
+            <div class="users__block__user">
+                <img 
+                    [src]="user.avatar
+                        ? API_URL + '/' + user.avatar
+                        : '../../../assets/images/usersPage/default.png'" 
+                    class="users__block__user__avatar"
+                >
+    
+                <div class="users__block__user__info">
+                    <div class="users__block__user__info__nickname">
+                        {{user.nickname}}
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

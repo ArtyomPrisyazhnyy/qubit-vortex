@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Get, Body, UploadedFile, Req, UseInterceptors, Request, Param } from '@nestjs/common';
+import { Controller, Post, UseGuards, Get, Body, UploadedFile, Req, UseInterceptors, Request, Param, Delete } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuestionService } from './question.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -24,7 +24,7 @@ export class QuestionController {
         @UploadedFile() image: any,
         @Req() req: any
     ){
-        const userId = req.user.id
+        const userId = req.user.id;
         return this.questionService.createQuestion(dto, image, userId)
     }
 
@@ -41,4 +41,12 @@ export class QuestionController {
     getOneQuestion(@Param('id') id: number){
         return this.questionService.getOneQuestion(id);
     }
+
+    @ApiOperation({summary: 'Delete one question'})
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteOneQuestion(@Param('id') id: number){
+        return this.questionService.removeOneQuestion(id)
+    }
+    
 }

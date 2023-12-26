@@ -16,6 +16,9 @@ import { Question } from './question/models/question.model';
 import { FilesModule } from './files/files.module';
 import { AnswerModule } from './question/answer/answer.module';
 import { Answer } from './question/answer/models/answer.model';
+import { Friends } from './friends/models/friends.model';
+import { FriendsModule } from './friends/friends.module';
+//import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -23,7 +26,8 @@ import { Answer } from './question/answer/models/answer.model';
       envFilePath: '.env'
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, 'static'),
+      rootPath: path.join(__dirname, '..', 'public'),
+      serveRoot: '/'
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -37,7 +41,8 @@ import { Answer } from './question/answer/models/answer.model';
         UserRoles,
         Role,
         Question,
-        Answer
+        Answer,
+        Friends
       ],
       autoLoadModels: true,
       synchronize: true
@@ -47,9 +52,13 @@ import { Answer } from './question/answer/models/answer.model';
     AuthModule,
     QuestionModule,
     FilesModule,
-    AnswerModule
+    AnswerModule,
+    FriendsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+   // AppGateway,
+  ],
 })
 export class AppModule {}

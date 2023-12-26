@@ -1,1 +1,12 @@
-<app-header></app-header>
+@if(isAuth){
+    <router-outlet></router-outlet>
+} @else {
+    <app-header></app-header>
+    <div class="container">
+        <app-sidebar></app-sidebar>
+
+        <main class="main">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+}

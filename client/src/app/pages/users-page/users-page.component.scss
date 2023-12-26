@@ -1,0 +1,82 @@
+.users{
+    width: 948px;
+    font-family: 'Inter', sans-serif;
+
+    &__title{
+        font-size: 26px;
+        font-weight: 400;
+        margin-bottom: 39px;
+    }
+
+    &__settings{
+        display: flex;
+        margin-bottom: 27px;
+
+        &__search{
+            margin-right: 211px;
+            border-radius: 6px;
+            border: 1px solid #D12525;
+            padding: 10px 0px 10px 10px;
+            display: flex;
+
+            &__btn{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 6px;
+            }
+
+            &__input{
+                color: #D12525;
+                width: 280px;
+
+                &::placeholder{
+                    color: rgba($color: #D12525, $alpha: 0.5);
+                }
+            }
+        }
+
+        &__sort{
+            border-radius: 6px;
+            border: 1px solid #FFC2C2;
+
+            &__btn{
+                padding: 10px 12px;
+                border-left: 1px solid #FFC2C2;
+
+                &:first-child{
+                    border: none
+                }
+            }
+        }
+    }
+
+    &__block{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        &__user{
+            margin-top: 53px;
+            display: flex;
+            width: 25%;
+
+            &__avatar{
+                height: 105px;
+                width: 84px;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+            &__info{
+                margin-left: 21px;
+
+                &__nickname{
+                    margin-top: 8px;
+                    color: #E93737;
+                    font-weight: 700;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

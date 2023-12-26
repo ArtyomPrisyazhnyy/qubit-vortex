@@ -1,0 +1,61 @@
+<div class="auth">
+    <header class="auth__header">
+        <img 
+            routerLink="/home"
+            class="auth__header__home"
+            src="../../../assets/images/Header/Home.svg"
+            alt="home"
+        >
+
+        <div 
+            routerLink="/home"
+            class="auth__header__Logo"
+        >
+            <img src="../../../assets/images/Header/Logo.svg" alt="Q">
+            <div class="auth__header__Logo__title">UBITVORTEX</div>
+        </div>
+
+        <div class="header__links">
+            <a 
+                routerLink="/login"
+                class="header__links__Login" 
+            >Log in</a>
+            <a 
+                routerLink="/registration"
+                class="header__links__SignUp"
+            >Sign Up</a>
+        </div>
+    </header>
+
+    <section class="auth__section">
+        <div class="auth__section__info">
+            <div class="auth__section__info__title">
+                Join the Qubitvortex community
+            </div>
+            <div class="auth__section__info__row">
+                <img src="../../../assets/images/Authorization/Vector.svg" alt="\/">
+                <div class="auth__section__info__row__txt">
+                    Save your favorite questions, answers, watch tags, and more
+                </div>
+            </div>
+            <div class="auth__section__info__row">
+                <img src="../../../assets/images/Authorization/Vector.svg" alt="\/">
+                <div class="auth__section__info__row__txt">
+                    Ask a question
+                </div>
+            </div>
+            <div class="auth__section__info__row">
+                <img src="../../../assets/images/Authorization/Vector.svg" alt="\/">
+                <div class="auth__section__info__row__txt">
+                    Add friends and send messages
+                </div>
+            </div>
+        </div>
+
+       @if(isLogin) {
+        <app-login></app-login>
+       } @else {
+        <app-signup></app-signup>
+       }
+    </section>
+</div>

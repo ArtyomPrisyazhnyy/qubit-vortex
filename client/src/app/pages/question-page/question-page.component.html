@@ -1,0 +1,236 @@
+<h2 class="title">
+    {{questionsService.oneQuestion.title}}
+</h2>
+<div class="questionInfo">
+    <div class="questionInfo__block">
+        <div class="questionInfo__block__static">
+            Asked
+        </div>
+        <div class="questionInfo__block__reactive">
+            today
+        </div>
+    </div>
+
+    <div class="questionInfo__block">
+        <div class="questionInfo__block__static">
+            Modified
+        </div>
+        <div class="questionInfo__block__reactive">
+            today
+        </div>
+    </div>
+
+    <div class="questionInfo__block">
+        <div class="questionInfo__block__static">
+            Vuiwed
+        </div>
+        <div class="questionInfo__block__reactive">
+            21 times
+        </div>
+    </div>
+</div>
+
+<div class="questionFlex">
+    <div class="question__statistics">
+        <button 
+            class="question__statistics__btn"
+        >
+            <img src="../../../assets/images/questionPage/StatisticsBtn.svg" alt="+">
+        </button>
+
+        <div class="question__statistics__number">
+            0
+        </div>
+
+        <button 
+            class="question__statistics__btn question__statistics__btn--minus"
+        >
+            <img src="../../../assets/images/questionPage/StatisticsBtn.svg" alt="-">
+        </button>
+
+        <button
+            class="question__statistics__save"
+        >
+            <img src="./../../assets/images/questionPage/save.svg" alt="save">
+        </button>
+    </div>
+
+    <div class="question__desc">
+        <div class="question__desc__text">
+            {{questionsService.oneQuestion.fullDescription}}
+        </div>
+
+        <div class="question__desc__info">
+            <div class="question__desc__info__tags">
+                <div class="question__desc__info__tags__tag">
+                    python
+                </div>
+                <div class="question__desc__info__tags__tag">
+                    django
+                </div>
+            </div>
+
+            <div class="question__desc__info__user">
+                <div class="question__desc__info__user__text">
+                    <div class="question__desc__info__user__text__nickname">
+                        {{questionsService.oneQuestion.user.nickname}}
+                    </div>
+                    <div class="question__desc__info__user__text__time">
+                        2 min ago
+                    </div>
+                </div>
+                <div class="question__desc__info__user__avatar">
+                    <img
+                        class="question__desc__info__user__avatar__img" 
+                        [src]="questionsService.oneQuestion.user.avatar 
+                        ? API_URL + '/' + questionsService.oneQuestion.user.avatar 
+                        : '../../../assets/images/defaultAvatar.svg'" 
+                        alt="user"
+                    >
+                </div>
+            </div>
+        </div>
+
+        @if(this.authService.currentUser?.id === questionsService.oneQuestion.userId) {
+
+            @if(modalService.isOpen$ | async){
+                <app-modal>
+                    <app-delete-question></app-delete-question>
+                </app-modal>
+            }
+
+            <button 
+                (click)="openModal()"
+                class="open__modal"
+            >
+                Delete question
+            </button>
+        }
+    </div>
+</div>
+
+@if(questionsService.oneQuestion.answer.length){
+    <div class="answerQuanity">
+        {{questionsService.oneQuestion.answer.length}} {{questionsService.oneQuestion.answer.length === 1 ? 'Answer' : 'Answers'}}
+    </div>
+
+    @for(answer of questionsService.oneQuestion.answer; track answer.id){
+        <div class="answer">
+            <div class="answer__statistics">
+                <button 
+                    class="answer__statistics__btn"
+                >
+                    <img src="../../../assets/images/questionPage/StatisticsBtn.svg" alt="+">
+                </button>
+
+                <div class="answer__statistics__number">
+                    0
+                </div>
+
+                <button 
+                    class="answer__statistics__btn question__statistics__btn--minus"
+                >
+                    <img src="../../../assets/images/questionPage/StatisticsBtn.svg" alt="-">
+                </button>
+
+                <button
+                    class="answer__statistics__save"
+                >
+                    <img src="./../../assets/images/questionPage/save.svg" alt="save">
+                </button>
+            </div>
+
+            <div class="answer__block">
+                <div class="answer__block__text">
+                    {{answer.answer}}
+                </div>
+
+                <div class="answer__user">
+                    <div class="answer__user__text">
+                        <div class="answer__user__text__nickname">
+                            {{answer.user.nickname}}
+                        </div>
+                        <div class="answer__user__text__time">
+                            2 min ago
+                        </div>
+                    </div>
+                    <div class="answer__user__avatar">
+                        <img
+                            class="answer__user__avatar__img" 
+                            [src]="answer.user.avatar ? API_URL + '/' + answer.user.avatar : '../../../assets/images/defaultAvatar.svg'" 
+                            alt="user"
+                        >
+                    </div>
+                </div>
+
+
+                @if(this.authService.currentUser?.id === answer.user.id){
+                    @if(modalService.isOpen$ | async){
+                        <app-modal>
+                            <app-delete-answer 
+                                [answerId]="answer.id"
+                                [questionId]="questionsService.oneQuestion.id.toString()"
+                            ></app-delete-answer>
+                        </app-modal>
+                    }
+                    <button
+                        (click)="openModal()"
+                        class="open__modal"
+                    >
+                        delete your answer
+                    </button>
+                }
+            </div>
+
+            <img
+                class="questionMark questionMark--2"
+                src="../../../assets/images/questionPage/questionMark.svg"
+            >
+            <img 
+                class="questionMark questionMark--1"
+                src="../../../assets/images/questionPage/questionMark.svg"
+            >
+        </div>
+    }
+}
+
+<div class="yourAnswer">
+    <img 
+        src="../../../assets/images/questionPage/yourAnswer.svg" 
+        class="yourAnswer__img"
+    >
+    <img 
+        src="../../../assets/images/questionPage/questionMark.svg"
+        class="yourAnswer__twoMarks yourAnswer__twoMarks--big"
+    >
+    <img 
+        src="../../../assets/images/questionPage/questionMark.svg"
+        class="yourAnswer__twoMarks yourAnswer__twoMarks--little"
+    >
+    <h3 class="yourAnswer__title">
+        Yor answer
+    </h3>
+
+    <form 
+        [formGroup]="answerData"
+        (ngSubmit)="onSubmit()"
+        class="yourAnswer__form"
+    >
+        <textarea 
+            (input)="autoResizeAnswer($event)"
+            type="text"
+            class="yourAnswer__form__textarea"
+            formControlName="answer"
+            placeholder="answer..."
+            required
+        >
+        </textarea>
+
+        <button 
+            [disabled]="!answerData.valid"
+            class="yourAnswer__form__post"
+        >
+            Post Your Answer
+        </button>
+    </form>
+</div>

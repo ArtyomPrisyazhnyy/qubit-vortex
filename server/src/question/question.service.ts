@@ -4,6 +4,9 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Question } from './models/question.model';
 import OpenAI from 'openai';
+import { User } from 'src/users/models/users.model';
+import { Sequelize } from 'sequelize';
+import { Answer } from './answer/models/answer.model';
 
 @Injectable()
 export class QuestionService {
@@ -20,7 +23,7 @@ export class QuestionService {
         
     ){
         this.openai = new OpenAI({
-            apiKey: process.env.MARFUSHA 
+            apiKey: process.env.OPENAI_API_KEY 
         });
     }
 
@@ -60,7 +63,7 @@ export class QuestionService {
             userId: userId
         } as CreateQuestionDto);
 
-        //const prompt = `${dto.title}. ${dto.fullDescription}`;
+        // const prompt = `${dto.title}. ${dto.fullDescription}`;
         // const gptAnswer = await this.chatWithGPt(prompt);
         // question.gptAnswer = gptAnswer;
         // await question.save();
@@ -72,7 +75,31 @@ export class QuestionService {
         let {limit} = req.query;
         limit = limit || 20;
         const questions = await this.questionRepository.findAndCountAll({
-            include: {all: true},
+            include: [
+                {
+                    model: User,
+                    attributes: {
+                        exclude: [
+                            'email', 
+                            'password', 
+                            'createdAt', 
+                            'updatedAt'
+                        ]
+                    }
+                }
+            ],
+            attributes: {
+                exclude: [
+                    'gptAnswer', 
+                    'image'
+                ],
+                include: [
+                    [
+                        Sequelize.literal(`CASE WHEN LENGTH("fullDescription") <= 200 THEN "fullDescription" ELSE CONCAT(SUBSTRING("fullDescription", 1, 200), '...') END`),
+                        'fullDescription',
+                      ],
+                ]
+            },
             limit
         })
         return questions;
@@ -81,12 +108,40 @@ export class QuestionService {
     async getOneQuestion(id: number) {
         const question = await this.questionRepository.findOne({
             where: {id},
-            include: {all: true}
+            include: [
+                {
+                    model: User,
+                    attributes: {
+                        exclude: [
+                            'email', 
+                            'password', 
+                            'createdAt', 
+                            'updatedAt'
+                        ]
+                    }
+                },
+                {
+                    model: Answer,
+                    include: [
+                        {
+                            model: User,
+                            attributes: {
+                                exclude: [
+                                    'email', 
+                                    'password', 
+                                    'createdAt', 
+                                    'updatedAt'
+                                ],
+                            }
+                        }
+                    ]
+                }
+            ],
         });
         return question;
     }
 
-    async removeQuestion (id: string){
+    async removeOneQuestion (id: number){
         const question = await this.questionRepository.destroy({
             where: {id}
         });

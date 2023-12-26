@@ -1,1 +1,52 @@
-<p>header works!</p>
+<header class="header">
+    <div class="header__container">
+        <div 
+            routerLink="/home"
+            class="header__Logo"
+        >
+            <img src="../../../assets/images/Header/Logo.svg" alt="Q">
+            <div class="header__Logo__title">UBITVORTEX</div>
+        </div>
+
+        <label class="header__search">
+            <div class="header__search__btn">
+                <img src="../../../assets/images/Header/searchVector.svg" alt="Search">
+            </div>
+            <input 
+                type="text" 
+                placeholder="Search..."
+                class="header__search__input"
+            >
+        </label>
+
+        @if(this.authService.isAuthSig()){
+            <button
+                style="color: white"
+                (click)="logoutHandler()"
+            >
+                log out
+            </button>
+            <div 
+                class="header__avatar"
+                routerLink="/profile"
+            >
+                <img
+                    class="header__avatar__img"
+                    src="../../../assets/images/IMG_20230907_220212_820.jpg"
+                >
+            </div>
+        } @else {
+            <div class="header__links">
+                <a 
+                    routerLink="/login"
+                    class="header__links__Login" 
+                >Log in</a>
+                <a 
+                    routerLink="/registration"
+                    class="header__links__SignUp"
+                >Sign Up</a>
+            </div>
+        }
+        
+    </div>
+</header>

@@ -11,7 +11,7 @@ export class AnswerService {
         private fileService: FilesService
     ) {}
 
-    async createAnswer (dto: CreateAnswerDto, image: any, userId: number){
+    async createAnswer (dto: CreateAnswerDto, image: any, userId: number, questionId: number){
         let fileName = null
         if (image) {
             fileName = await this.fileService.createFile(image);
@@ -20,11 +20,17 @@ export class AnswerService {
         const answer = await this.answerRepository.create({
             ...dto,
             image: fileName,
-            userId: userId
+            userId: userId,
+            questionId
         } as CreateAnswerDto)
 
         return answer;
     }
 
-    //async getAnswer ()
+    async removeOneAnswer(id: number){
+        const answer = await this.answerRepository.destroy({
+            where: {id}
+        });
+        return answer;
+    }
 }

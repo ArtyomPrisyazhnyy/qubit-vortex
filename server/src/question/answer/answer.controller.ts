@@ -1,5 +1,5 @@
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Controller, Post, UseInterceptors, UseGuards, Body, UploadedFile, Req, Get } from "@nestjs/common";
+import { Controller, Post, UseInterceptors, UseGuards, Body, UploadedFile, Req, Get, Param, Delete } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AnswerService } from "./answer.service";
 import { Answer } from "./models/answer.model";
@@ -16,16 +16,24 @@ export class AnswerController{
 
     @ApiOperation({summary: 'Create an answer'})
     @ApiResponse({status: 200, type: [Answer]})
-    @Post()
+    @Post(':id')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
     createAnswer(
         @Body() dto: CreateAnswerDto,
         @UploadedFile() image: any,
-        @Req() req: any
+        @Req() req: any,
+        @Param('id') questionId: number
     ){
         const userId = req.user.id;
-        return this.answerService.createAnswer(dto, image, userId)
+        return this.answerService.createAnswer(dto, image, userId, questionId)
+    }
+
+    @ApiOperation({summary: 'Delete one question'})
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteOneAnswer(@Param('id') id: number){
+        return this.answerService.removeOneAnswer(id)
     }
 
 }

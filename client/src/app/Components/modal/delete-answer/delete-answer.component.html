@@ -1,0 +1,21 @@
+<h3 class="modal__title">
+    Delete your answer
+</h3>
+<div class="modal__description">
+    Are you sure you want to delete your answer permanently?
+</div>
+
+<div class="modal__bts">
+    <button 
+        (click)="modalService.closeModal()"
+        class="modal__bts__btn modal__bts__btn--close"
+    >
+        Cancel
+    </button>
+    <button 
+        (click)="deleteOneAnswer()"
+        class="modal__bts__btn modal__bts__btn--delete"
+    >
+        Delete
+    </button>
+</div>

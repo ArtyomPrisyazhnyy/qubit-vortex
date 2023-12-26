@@ -5,6 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/models/users.model';
+import { AuthLoginDto } from './dto/auth-login.dto';
+import { AuthRegistrationDto } from './dto/auth-registration.dto';
 
 @Injectable()
 export class AuthService  {
@@ -21,9 +23,10 @@ export class AuthService  {
             const existingAdminUser = await this.userService.getUserByRole(adminRole);
         
             if (!existingAdminUser && adminRole) {
-                const adminDto: UserDto = {
+                const adminDto = {
                     email: process.env.ADMIN_EMAIL,
                     password: process.env.ADMIN_PASSWORD,
+                    nickname: "Administrator"
                 };
             
                 const hashPassword = await bcrypt.hash(adminDto.password, 5);
@@ -34,23 +37,25 @@ export class AuthService  {
             console.log(`Error: ${e}`)
         }
     }
+
     
-    async login(userDto: UserDto){
+    async login(authLoginDto: AuthLoginDto): Promise<{ token: string }>{
         await this.createDefaultAdminUser();
 
-        const user = await this.validateUser(userDto)
+        const user = await this.validateUser(authLoginDto)
         return this.generateToken(user)
     }
 
-    async registration(userDto: UserDto): Promise<{ token: string }> {
+
+    async registration(authRegistrationDto: AuthRegistrationDto): Promise<{ token: string }> {
         await this.createDefaultAdminUser();
 
-        const candidate = await this.userService.getUserByEmail(userDto.email);
+        const candidate = await this.userService.getUserByEmail(authRegistrationDto.email);
         if (candidate) {
             throw new HttpException('A user with this email exists',  HttpStatus.BAD_REQUEST)
         }
-        const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({...userDto, password: hashPassword});
+        const hashPassword = await bcrypt.hash(authRegistrationDto.password, 5);
+        const user = await this.userService.createUser({...authRegistrationDto, password: hashPassword});
         return this.generateToken(user)
     }
 
@@ -61,12 +66,12 @@ export class AuthService  {
         }
     }
 
-    private async validateUser(userDto: UserDto){
-        const user = await this.userService.getUserByEmail(userDto.email);
+    private async validateUser(authLoginDto: AuthLoginDto){
+        const user = await this.userService.getUserByEmail(authLoginDto.email);
         if (!user) {
             throw new UnauthorizedException({message: 'User with this email not found'})
         }
-        const passwordEquals = await bcrypt.compare(userDto.password, user?.password);
+        const passwordEquals = await bcrypt.compare(authLoginDto.password, user?.password);
         if (passwordEquals) {
             return user;
         } 

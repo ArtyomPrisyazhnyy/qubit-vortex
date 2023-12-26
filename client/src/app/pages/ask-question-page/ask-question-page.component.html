@@ -1,0 +1,90 @@
+<h2 class="title">
+    Ask your question
+</h2>
+
+<form 
+    [formGroup]="questionData"
+    (ngSubmit)="onSubmit()"
+    class="question"
+>
+    <div class="question__askTitle">
+        <div class="question__askTitle__title">
+            Title
+        </div>
+        <div class="question__askTitle__info">
+            Be specific and imagine you’re asking a question to another person.
+        </div>
+
+        <textarea 
+            (input)="autoResizeTitle($event)"
+            type="text"
+            class="question__askTitle__textarea"
+            formControlName="title"
+            placeholder="title..."
+            required
+        >
+        </textarea>
+        @if(questionData.controls['title'].invalid 
+            && (questionData.controls['title'].dirty || questionData.controls['title'].touched) 
+            ) {
+
+                @if(questionData.controls['title'].hasError('required')){
+                    <div class="question__askTitle__error">
+                        Title is required
+                    </div>
+                }
+
+                @if(questionData.controls['title'].hasError('maxlength')) {
+                    <div class="question__askTitle__error">
+                        Maximum length must be 255 characters
+                    </div>
+                }
+        }
+        <img 
+            class="question__askTitle__img"
+            src="../../../assets/images/askAQuestion/titleImage.svg"
+        >
+    </div>
+    
+    <div class="question__askDesc">
+        <div class="question__askDesc__title">
+            Describe your problem
+        </div>
+        <div class="question__askDesc__info">
+            Introduce the problem and expand on what you put in the title. Minimum 20 characters.
+        </div>
+
+        <textarea 
+            (input)="autoResizeDescription($event)"
+            type="text"
+            class="question__askDesc__textarea"
+            formControlName="fullDescription"
+            placeholder="Description..."
+            required
+        >
+        </textarea>
+        @if(questionData.controls['fullDescription'].invalid 
+            && (questionData.controls['fullDescription'].dirty || questionData.controls['fullDescription'].touched) 
+            ) {
+
+                @if(questionData.controls['fullDescription'].hasError('required')){
+                    <div class="question__askDesc__error">
+                        Description is required
+                    </div>
+                }
+        }
+
+    </div>
+
+    <div class="question__btns">
+        <button 
+            type="button"
+            class="question__btns__btn question__btns__btn--discard"
+        >Discard draft</button>
+        <button 
+            [disabled]="!questionData.valid"
+            class="question__btns__btn question__btns__btn--post"
+        >Post a question</button>
+    </div>
+
+</form>
