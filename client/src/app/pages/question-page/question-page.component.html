@@ -1,6 +1,9 @@
 <h2 class="title">
     {{questionsService.oneQuestion.title}}
 </h2>
+<pre>
+    <code [highlight]="yourCode" ></code>
+  </pre>
 <div class="questionInfo">
     <div class="questionInfo__block">
         <div class="questionInfo__block__static">
@@ -56,10 +59,12 @@
     </div>
 
     <div class="question__desc">
-        <div class="question__desc__text">
-            {{questionsService.oneQuestion.fullDescription}}
+        <div 
+            class="question__desc__text"
+            [innerHTML]="questionsService.oneQuestion.fullDescription | inlineCode"
+        >
         </div>
-
+        
         <div class="question__desc__info">
             <div class="question__desc__info__tags">
                 <div class="question__desc__info__tags__tag">

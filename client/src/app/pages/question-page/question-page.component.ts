@@ -9,6 +9,10 @@ import { ModalService } from '../../services/modal.service';
 import { ModalComponent } from '../../Components/modal/modal.component';
 import { DeleteQuestionComponent } from '../../Components/modal/delete-question/delete-question.component';
 import { DeleteAnswerComponent } from '../../Components/modal/delete-answer/delete-answer.component';
+import { InlineCodePipe } from '../../pipes/inline-code.pipe';
+import { HighlightModule } from 'ngx-highlightjs';
+//import { SanitizeHtmlPipe } from '../../pipes/sanitize-html-pipe.pipe';
+
 
 @Component({
     selector: 'app-question-page',
@@ -18,14 +22,30 @@ import { DeleteAnswerComponent } from '../../Components/modal/delete-answer/dele
         ReactiveFormsModule, 
         ModalComponent, 
         DeleteQuestionComponent,
-        DeleteAnswerComponent
+        DeleteAnswerComponent,
+        InlineCodePipe,
+        //SanitizeHtmlPipe
+        HighlightModule
     ],
     templateUrl: './question-page.component.html',
-    styleUrl: './question-page.component.scss'
+    styleUrl: './question-page.component.scss',
 })
 
 export class QuestionPageComponent implements OnInit {
     answerData: FormGroup;
+
+
+
+    yourCode = `
+    // Ваш код здесь
+    public class Example {
+      public static void main(String[] args) {
+        System.out.println("Привет, мир!");
+      }
+    }
+  `;
+
+
 
     constructor(
         private route: ActivatedRoute, 

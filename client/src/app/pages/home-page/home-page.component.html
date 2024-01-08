@@ -33,8 +33,10 @@
                     >
                         {{ question.title }}
                     </div>
-                    <div class="home__questions__row__col__desc">
-                        {{question.fullDescription}}
+                    <div 
+                        class="home__questions__row__col__desc"
+                        [innerHTML]="question.fullDescription | inlineCode"
+                    >
                     </div>
                     <div class="home__questions__row__col__info">
                         <div class="home__questions__row__col__info__tags">

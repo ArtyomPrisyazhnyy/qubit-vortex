@@ -15,6 +15,7 @@ import { ModalComponent } from './Components/modal/modal.component';
 import { AuthService } from './services/auth.service';
 import { DeleteQuestionComponent } from './Components/modal/delete-question/delete-question.component';
 import { DeleteAnswerComponent } from './Components/modal/delete-answer/delete-answer.component';
+import { HighlightModule } from 'ngx-highlightjs';
 
 @Component({
     selector: 'app-root',
@@ -31,7 +32,8 @@ import { DeleteAnswerComponent } from './Components/modal/delete-answer/delete-a
         HomePageComponent,
         ToastrModule,
         DeleteQuestionComponent,
-        DeleteAnswerComponent
+        DeleteAnswerComponent,
+        HighlightModule
     ],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],

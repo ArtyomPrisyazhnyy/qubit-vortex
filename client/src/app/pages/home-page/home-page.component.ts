@@ -3,11 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuestionService } from '../../services/questions.service';
 import { RouterLink } from '@angular/router';
+import { InlineCodePipe } from '../../pipes/inline-code.pipe';
 
 @Component({
     selector: 'app-home-page',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [
+        CommonModule, 
+        RouterLink,
+        InlineCodePipe
+    ],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss'
 })
