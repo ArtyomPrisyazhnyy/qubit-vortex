@@ -1,4 +1,4 @@
-import { Controller, Post, Param, UseGuards, Get, Body, Req } from '@nestjs/common';
+import { Controller, Post, Param, UseGuards, Get, Body, Req, Delete, Put } from '@nestjs/common';
 import { FriendsService } from './friends.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -9,7 +9,6 @@ import { AddFriendDto } from './dto/friends.dto';
 @ApiTags("Friends")
 @Controller('friends')
 export class FriendsController {
-
     constructor(
         private friendsService: FriendsService
     ) {}
@@ -20,19 +19,18 @@ export class FriendsController {
     sendFriendRequest(
         @Body() dto: AddFriendDto,
         @Req() req: any,
-        //@Param('friendId') friendId: number,
-    ): Promise<void> {
+    ) {
         const userId = req.user.id;
         return this.friendsService.sendFriendRequest(userId, dto);
     }
 
     @ApiOperation({summary: "Accept friend request"})
     @UseGuards(JwtAuthGuard)
-    @Post('accept-request')
+    @Put('accept-request')
     acceptFriendRequest(
         @Body() dto: AddFriendDto,
         @Req() req: any,
-    ): Promise<void> {
+    ) {
         const userId = req.user.id;
         const friendId = dto.friendId
         return this.friendsService.acceptFriendRequest(userId, friendId);
@@ -40,13 +38,12 @@ export class FriendsController {
 
     @ApiOperation({summary: "Decline friend request"})
     @UseGuards(JwtAuthGuard)
-    @Post('decline-request/:friendId')
+    @Put('decline-request/:friendId')
     declineFriendRequest(
-        @Body() dto: AddFriendDto,
         @Req() req: any,
-    ): Promise<void> {
+        @Param('friendId') friendId: number
+    ){
         const userId = req.user.id;
-        const friendId = dto.friendId;
         return this.friendsService.declineFriendRequest(userId, friendId);
     }
 
@@ -67,6 +64,6 @@ export class FriendsController {
         @Req() req: any
     ): Promise<User[]> {
         const userId = req.user.id;
-        return this.friendsService.getFriends(userId);
+        return this.friendsService.getAllFriends(userId);
     }
 }

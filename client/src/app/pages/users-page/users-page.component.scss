@@ -68,13 +68,25 @@
                 border-radius: 6px;
             }
             &__info{
-                margin-left: 21px;
+                margin-left: 14px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
 
-                &__nickname{
-                    margin-top: 8px;
-                    color: #E93737;
-                    font-weight: 700;
-                    font-size: 16px;
+                &__top{
+                    &__nickname{
+                        margin-top: 8px;
+                        color: #E93737;
+                        font-weight: 700;
+                        font-size: 16px;
+                    }
+                }
+
+                &__bottom{
+                    background-color:#E93737;
+                    border-radius: 6px;
+                    color: #fff;
+                    width: 60px;
                 }
             }
         }

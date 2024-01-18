@@ -36,6 +36,18 @@ export class User extends Model<User, UserCreationAttrs>{
     @Column({type: DataType.STRING, allowNull: true})
     avatar: string;
 
+    @ApiProperty({example: 'USA', description: 'User country'})
+    @Column({type: DataType.STRING, allowNull: true})
+    country: string;
+
+    @ApiProperty({example: "I'm learning Python and Django", description: 'About the user'})
+    @Column({type: DataType.TEXT, allowNull: true})
+    aboutMe: string;
+
+    @ApiProperty({example: "https://...", description: 'User links'})
+    @Column({type: DataType.TEXT, allowNull: true})
+    links: string;
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 

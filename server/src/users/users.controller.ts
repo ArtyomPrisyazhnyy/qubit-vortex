@@ -1,5 +1,5 @@
 import { UsersService } from './users.service';
-import { Body, Controller, Get, Post, Put, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './models/users.model';
 import { UserDto } from './dto/user.dto';
@@ -36,8 +36,26 @@ export class UsersController {
         return this.UsersService.getAllUsers(req);
     }
 
+    @ApiOperation({summary: 'Get user by Id'})
+    @ApiResponse({status: 200})
+    @UseGuards(JwtAuthGuard)
+    @Get('/userId/:id')
+    getUserById(@Param('id') id: number){
+        return this.UsersService.getUserById(id);
+    }
+
+
+    @ApiOperation({summary: 'Get current user'})
+    @ApiResponse({status: 200})
+    @UseGuards(JwtAuthGuard)
+    @Get('/currentUser')
+    getCurrentUser(@Req() req: any){
+        const userId = req.user.id
+        return this.UsersService.getUserById(userId);
+    }
+
     @ApiOperation({summary: 'Update user info'})
-    @ApiResponse({status: 200, type: [User]})
+    @ApiResponse({status: 200})
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
     @Put()
@@ -47,8 +65,8 @@ export class UsersController {
         @UploadedFile() image: any
     ){
         const userId = req.user.id;
-        //const excludeFields = req.body.excludeFields || []
 
-        return this.UsersService.updateUserInfo(updateUserInfoDto, userId, image  /*excludeFields*/)
+        return this.UsersService.updateUserInfo(updateUserInfoDto, userId, image)
     }
+
 }

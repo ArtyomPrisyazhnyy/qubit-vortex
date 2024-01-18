@@ -10,6 +10,7 @@ import { FriendsPageComponent } from './pages/friends-page/friends-page.componen
 import { QuestionPageComponent } from './pages/question-page/question-page.component';
 import { AskQuestionPageComponent } from './pages/ask-question-page/ask-question-page.component';
 import { ChatsPageComponent } from './pages/chats-page/chats-page.component';
+import { UpdateProfilePageComponent } from './pages/update-profile-page/update-profile-page.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,11 @@ export const routes: Routes = [
     {
         path: 'question/:id', 
         component: QuestionPageComponent
+    },
+    {
+        path: 'updateProfile', 
+        component: UpdateProfilePageComponent,
+        canActivate: [authGuard()]
     },
     {
         path: 'profile', 

@@ -46,10 +46,10 @@ export class QuestionService {
 
     getOneQuestion(id: string): Observable<IOneQuestion>{
         return this.http.get<IOneQuestion>(`${API_URL}/question/${id}`)
-        .pipe(
-            retry(2),
-            tap(oneQuestion => this.oneQuestion = oneQuestion)
-        )
+            .pipe(
+                retry(2),
+                tap(oneQuestion => this.oneQuestion = oneQuestion)
+            )
     }
 
     createQuestion(question: IPostQuestion): Observable<IPostQuestionRes>{

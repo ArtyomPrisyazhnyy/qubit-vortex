@@ -56,11 +56,11 @@ export class AuthService  {
         }
         const hashPassword = await bcrypt.hash(authRegistrationDto.password, 5);
         const user = await this.userService.createUser({...authRegistrationDto, password: hashPassword});
-        return this.generateToken(user)
+        return this.generateToken(user);
     }
 
     private async generateToken(user: User): Promise<{ token: string }>{
-        const payload = {email: user.email, id: user.id, roles: user.roles}
+        const payload = {email: user.email, id: user.id, avatar: user.avatar, roles: user.roles}
         return {
             token: this.jwtService.sign(payload)
         }

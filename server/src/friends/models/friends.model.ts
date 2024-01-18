@@ -2,9 +2,17 @@ import { Column, Model, Table, ForeignKey, BelongsTo, DataType } from 'sequelize
 import { User } from 'src/users/models/users.model';
 
 
+interface FriendAttributes {
+    userId: number;
+    friendId: number;
+    status: 'pending' | 'accepted' | 'rejected';
+}
+  
+interface FriendCreationAttributes extends FriendAttributes {}
+
 
 @Table({ tableName: 'friends' })
-export class Friends extends Model<Friends> {
+export class Friends extends Model<FriendAttributes, FriendCreationAttributes> {
     @ForeignKey(() => User)
     @Column
     userId: number;
@@ -13,10 +21,10 @@ export class Friends extends Model<Friends> {
     @Column
     friendId: number;
 
-    @Column({ type: DataType.BOOLEAN, defaultValue: false })
-    isAccepted: boolean;
+    @Column({ type: DataType.STRING, defaultValue: 'pending' })
+    status: string;
 
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, 'userId')
     user: User;
 
     @BelongsTo(() => User, 'friendId')

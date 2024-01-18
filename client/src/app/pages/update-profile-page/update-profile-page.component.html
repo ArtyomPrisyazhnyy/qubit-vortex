@@ -1,0 +1,112 @@
+<div class="auth">
+    <header class="auth__header">
+        <img 
+            routerLink="/home"
+            class="auth__header__home"
+            src="../../../assets/images/Header/Home.svg"
+            alt="home"
+        >
+
+        <div 
+            routerLink="/home"
+            class="auth__header__Logo"
+        >
+            <img src="../../../assets/images/Header/Logo.svg" alt="Q">
+            <div class="auth__header__Logo__title">UBITVORTEX</div>
+        </div>
+
+        <div></div>
+    </header>
+
+    <section class="auth__section">
+        <div class="auth__section__info">
+            <div class="auth__section__info__title">
+                Fill out your profile
+            </div>
+        </div>
+
+        <form 
+            [formGroup]="userData"
+            (ngSubmit)="onSubmit()"
+            class="auth__section__form"
+        >
+            <div class="auth__section__form__row">
+                <div class="auth__section__form__row__title">
+                    Nickname
+                </div>
+                <input 
+                    formControlName="nickname"
+                    required
+                    class="auth__section__form__row__input auth__section__form--w"
+                    type="text"
+                >
+                @if(userData.controls['nickname'].invalid 
+                    && 
+                    (userData.controls['nickname'].dirty || userData.controls['nickname'].touched) ) {
+        
+                    @if(userData.controls['nickname'].hasError('required')) {
+                        <div class="auth__section__form__row__error">Nickname is required</div>
+                    }
+                    @if(userData.controls['nickname'].hasError('minlength') || userData.controls['nickname'].hasError('maxlength')) {
+                        <div class="auth__section__form__row__error">Nickname must have 4-20 characters</div>
+                    }
+                }
+            </div>
+
+            <div class="auth__section__form__row">
+                <div class="auth__section__form__row__title">
+                    About me
+                </div>
+
+                <input 
+                    formControlName="aboutMe"
+                    class="auth__section__form__row__input auth__section__form--w"
+                    type="text"
+                >
+                @if(userData.controls['aboutMe'].invalid 
+                    && 
+                    (userData.controls['aboutMe'].dirty || userData.controls['aboutMe'].touched) ) {
+        
+                    @if(userData.controls['aboutMe'].hasError('maxlength')) {
+                        <div class="auth__section__form__row__error">Maximum length 4000 characters</div>
+                    }
+                }
+            </div>
+
+            <div class="auth__section__form__row">
+                <div class="auth__section__form__row__title">
+                    Links
+                </div>
+
+                <input 
+                    formControlName="links"
+                    class="auth__section__form__row__input auth__section__form--w"
+                    type="text"
+                >
+                @if(userData.controls['links'].invalid 
+                    && 
+                    (userData.controls['links'].dirty || userData.controls['links'].touched) ) {
+        
+                    @if(userData.controls['links'].hasError('maxlength')) {
+                        <div class="auth__section__form__row__error">Maximum length 4000 characters</div>
+                    }
+                }
+            </div>
+            
+            <mat-select-country 
+                appearance="outline"
+                label="Country"
+                class="className"
+                formControlName="country"
+                (onCountrySelected)="onCountrySelected($event)">
+            </mat-select-country>
+            
+
+            <button 
+                [disabled]="!userData.valid"
+                class="auth__section__form__btn auth__section__form--w"
+            >Save</button>
+        </form>
+        
+    </section>
+</div>

@@ -1,6 +1,6 @@
 import { RolesService } from './../roles/roles.service';
 import { UserDto } from './dto/user.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/users.model';
 import {Role} from '../roles/roles.model';
@@ -11,9 +11,9 @@ import { FilesService } from 'src/files/files.service';
 export class UsersService {
 
     constructor(
-      @InjectModel(User) private userRepository: typeof User, 
-      private roleService: RolesService,
-      private fileService: FilesService
+        @InjectModel(User) private userRepository: typeof User, 
+        private roleService: RolesService,
+        private fileService: FilesService
     ) { }
 
     async createUser(dto: UserDto) {
@@ -35,16 +35,15 @@ export class UsersService {
     }
 
     async getUserByRole(role: Role): Promise<User | null> {
-      const users = await this.userRepository.findAll({
-        include: [
-          {
-            model: Role,
-            where: { id: role.id },
-          },
-        ],
-      });
-      
-      return users.length ? users[0] : null;
+        const users = await this.userRepository.findAll({
+            include: [
+                {
+                    model: Role,
+                    where: { id: role.id },
+                },
+            ],
+        });
+        return users.length ? users[0] : null;
     }
 
     async getAllUsers(req: any) {
@@ -59,38 +58,63 @@ export class UsersService {
                     'updatedAt'
                 ]
             }
+            // include: {all: true}
         });
         return users;
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({ where: { email }, include: { all: true } })
+        const user = await this.userRepository.findOne({ where: { email }, include: { all: true } });
+
         return user;
     }
 
     async getUserById(id: number) {
-        const user = await this.userRepository.findOne({ where: { id }, include: { all: true } })
+        const user = await this.userRepository.findOne({
+            where: { id },
+            attributes: {
+                exclude: [
+                    'email',
+                    'password',
+                    'createdAt',
+                    'updatedAt'
+                ]
+            }
+        })
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
         return user;
-    }    
+    }
+    
+    async updateUserInfo(dto: UpdateUserInfoDto, userId: number, image: any){
+        const user = await this.getUserById(userId);
+        if (!user){
+            throw new NotFoundException('User not found');
+        }
 
-    async updateUserInfo(dto: UpdateUserInfoDto, userId: number, image: any, /*excludeFields: string[]*/){
-      const user = await this.getUserById(userId);
-
-      user.nickname = dto.nickname;
-      if (image) {
-        user.avatar = await this.fileService.createFile(image);
-      }
+        if (image){
+            user.avatar = await this.fileService.createFile(image);
+        }
+        if (dto.nickname){
+            user.nickname = dto.nickname;
+        }
+        if (dto.country){
+            user.country = dto.country;
+        }
+        if (dto.aboutMe){
+            user.aboutMe = dto.aboutMe;
+        }
+        if (dto.links){
+            user.links = dto.links;
+        }
       
-      await user.save();
-      const updatedUser = {
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        avatar: user.avatar,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        roles: user.roles,
-      };
-      return updatedUser
+        await user.save();
+        const userWithoutUpdatedAt = user.toJSON();
+        delete userWithoutUpdatedAt.updatedAt;
+
+        return userWithoutUpdatedAt;
     }
 }

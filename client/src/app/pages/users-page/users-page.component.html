@@ -30,14 +30,23 @@
                 <img 
                     [src]="user.avatar
                         ? API_URL + '/' + user.avatar
-                        : '../../../assets/images/usersPage/default.png'" 
+                        : '../../../assets/images/defaultAvatar.svg'" 
                     class="users__block__user__avatar"
                 >
     
                 <div class="users__block__user__info">
-                    <div class="users__block__user__info__nickname">
-                        {{user.nickname}}
+                    <div class="users__block__user__info__top">
+                        <div class="users__block__user__info__top__nickname">
+                            {{user.nickname}}
+                        </div>
                     </div>
+                    
+                    <button
+                        (click)="sendRequest(user.id)"
+                        class="users__block__user__info__bottom"
+                    >
+                        add
+                    </button>
                 </div>
             </div>
         }

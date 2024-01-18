@@ -10,7 +10,7 @@ import { API_URL } from "../../environments/environments";
 export class UsersService {
     constructor(
         private readonly http: HttpClient
-    ) { }
+    ){}
 
     users: IUSersPage[] = []
 
@@ -24,5 +24,9 @@ export class UsersService {
             retry(2),
             tap(users => this.users = users)
         )
+    }
+
+    getCurrentUser(): Observable<any>{
+        return this.http.get<any>(`${API_URL}/users/currentUser`)
     }
 }

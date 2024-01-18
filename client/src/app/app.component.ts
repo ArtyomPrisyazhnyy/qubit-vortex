@@ -16,6 +16,9 @@ import { AuthService } from './services/auth.service';
 import { DeleteQuestionComponent } from './Components/modal/delete-question/delete-question.component';
 import { DeleteAnswerComponent } from './Components/modal/delete-answer/delete-answer.component';
 import { HighlightModule } from 'ngx-highlightjs';
+import { MatSelectCountryModule } from "@angular-material-extensions/select-country";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @Component({
     selector: 'app-root',
@@ -33,7 +36,8 @@ import { HighlightModule } from 'ngx-highlightjs';
         ToastrModule,
         DeleteQuestionComponent,
         DeleteAnswerComponent,
-        HighlightModule
+        HighlightModule,
+        MatSelectCountryModule,
     ],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
@@ -46,7 +50,7 @@ export class AppComponent {
         private authService: AuthService
     ){}
 
-    isAuth: boolean = false;
+    isAuthPath: boolean = false;
 
     ngOnInit(): void {
         if(typeof localStorage !== 'undefined'){
@@ -60,10 +64,10 @@ export class AppComponent {
             .subscribe(() => {
                 const path = this.router.url;
 
-                this.isAuth = (path === '/login' || path === '/registration');
+                this.isAuthPath = (path === '/login' || path === '/registration' || path === '/updateProfile');
 
                 console.log('Текущий путь:', path);
-                console.log('isAuth:', this.isAuth);
+                console.log('isAuth:', this.isAuthPath);
             });
     }
 }

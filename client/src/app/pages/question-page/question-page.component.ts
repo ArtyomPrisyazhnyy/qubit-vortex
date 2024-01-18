@@ -34,19 +34,7 @@ import { HighlightModule } from 'ngx-highlightjs';
 export class QuestionPageComponent implements OnInit {
     answerData: FormGroup;
 
-
-
-    yourCode = `
-    // Ваш код здесь
-    public class Example {
-      public static void main(String[] args) {
-        System.out.println("Привет, мир!");
-      }
-    }
-  `;
-
-
-
+    
     constructor(
         private route: ActivatedRoute, 
         public questionsService: QuestionService,
@@ -76,7 +64,7 @@ export class QuestionPageComponent implements OnInit {
         });
     }
 
-        autoResizeAnswer(e: any): void {
+    autoResizeAnswer(e: any): void {
         const textarea = e.target;
         textarea.style.height = '343px'; 
         textarea.style.height = `${Math.max(343, textarea.scrollHeight)}px`;
