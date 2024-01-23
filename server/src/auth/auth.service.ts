@@ -1,6 +1,6 @@
 import { RolesService } from 'src/roles/roles.service';
 import { UserDto } from './../users/dto/user.dto';
-import { HttpException, HttpStatus, Injectable, UnauthorizedException} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnModuleInit, UnauthorizedException} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
@@ -9,7 +9,7 @@ import { AuthLoginDto } from './dto/auth-login.dto';
 import { AuthRegistrationDto } from './dto/auth-registration.dto';
 
 @Injectable()
-export class AuthService  {
+export class AuthService implements OnModuleInit  {
     
     constructor(
         private userService: UsersService,
@@ -17,7 +17,7 @@ export class AuthService  {
         private jwtService: JwtService
     ) { }
 
-    private async createDefaultAdminUser() {
+    async onModuleInit() {
         try {
             const adminRole = await this.rolesService.getRoleByValue('ADMIN');
             const existingAdminUser = await this.userService.getUserByRole(adminRole);
@@ -38,9 +38,9 @@ export class AuthService  {
         }
     }
 
+
     
     async login(authLoginDto: AuthLoginDto): Promise<{ token: string }>{
-        await this.createDefaultAdminUser();
 
         const user = await this.validateUser(authLoginDto)
         return this.generateToken(user)
@@ -48,7 +48,6 @@ export class AuthService  {
 
 
     async registration(authRegistrationDto: AuthRegistrationDto): Promise<{ token: string }> {
-        await this.createDefaultAdminUser();
 
         const candidate = await this.userService.getUserByEmail(authRegistrationDto.email);
         if (candidate) {
