@@ -8,7 +8,7 @@
             Asked
         </div>
         <div class="questionInfo__block__reactive">
-            today
+            {{questionsService.oneQuestion.createdAt | customAdvancedDate}}
         </div>
     </div>
 
@@ -17,16 +17,16 @@
             Modified
         </div>
         <div class="questionInfo__block__reactive">
-            today
+            {{questionsService.oneQuestion.updatedAt | customAdvancedDate}}
         </div>
     </div>
 
     <div class="questionInfo__block">
         <div class="questionInfo__block__static">
-            Vuiwed
+            Viewed
         </div>
         <div class="questionInfo__block__reactive">
-            21 times
+            {{questionsService.oneQuestion.views}} {{questionsService.oneQuestion.views === 1 ? 'time' : 'times'}}
         </div>
     </div>
 </div>
@@ -59,18 +59,17 @@
     <div class="question__desc">
         <div 
             class="question__desc__text"
-            [innerHTML]="questionsService.oneQuestion.fullDescription | inlineCode"
+            [innerHTML]="questionsService.oneQuestion.fullDescription | replaceSymbols | newlineToBrPipe | inlineCode"
         >
         </div>
         
         <div class="question__desc__info">
             <div class="question__desc__info__tags">
-                <div class="question__desc__info__tags__tag">
-                    python
-                </div>
-                <div class="question__desc__info__tags__tag">
-                    django
-                </div>
+                @for (tags of questionsService.oneQuestion.tags; track $index) {
+                    <a class="question__desc__info__tags__tag">
+                        {{tags.tag}}
+                    </a>
+                }
             </div>
 
             <div class="question__desc__info__user">
@@ -79,7 +78,7 @@
                         {{questionsService.oneQuestion.user.nickname}}
                     </div>
                     <div class="question__desc__info__user__text__time">
-                        2 min ago
+                        asked {{questionsService.oneQuestion.createdAt | customDate}}
                     </div>
                 </div>
                 <div class="question__desc__info__user__avatar">
@@ -154,7 +153,7 @@
                             {{answer.user.nickname}}
                         </div>
                         <div class="answer__user__text__time">
-                            2 min ago
+                            answered {{answer.createdAt | customDate}}
                         </div>
                     </div>
                     <div class="answer__user__avatar">

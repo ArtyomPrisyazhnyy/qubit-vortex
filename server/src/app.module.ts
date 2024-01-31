@@ -19,6 +19,9 @@ import { Answer } from './question/answer/models/answer.model';
 import { Friends } from './friends/models/friends.model';
 import { FriendsModule } from './friends/friends.module';
 //import { AppGateway } from './app.gateway';
+import { TagsModule } from './tags/tags.module';
+import { Tags } from './tags/models/tags.model';
+import { QuestionTags } from './tags/models/question-tags.model';
 
 @Module({
   imports: [
@@ -42,7 +45,9 @@ import { FriendsModule } from './friends/friends.module';
         Role,
         Question,
         Answer,
-        Friends
+        Friends,
+        Tags,
+        QuestionTags
       ],
       autoLoadModels: true,
       synchronize: true
@@ -53,7 +58,8 @@ import { FriendsModule } from './friends/friends.module';
     QuestionModule,
     FilesModule,
     AnswerModule,
-    FriendsModule
+    FriendsModule,
+    TagsModule
   ],
   controllers: [AppController],
   providers: [

@@ -2,6 +2,7 @@
     <nav class="sidebar__nav">
         <ul class="sidebar__nav__list">
             <li 
+                (click)="reset()"
                 routerLink="/home"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row"
@@ -10,6 +11,7 @@
                 <div>Home</div>
             </li>
             <li 
+                (click)="reset()"
                 routerLink="/users"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row"
@@ -17,7 +19,8 @@
                 <img src="../../../assets/images/Sibebar/users.svg" alt="">
                 <div>Users</div>
             </li>
-            <li 
+            <li    
+                (click)="reset()"
                 routerLink="/tags"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row"
@@ -26,6 +29,7 @@
                 <div>Tags</div>
             </li>
             <li 
+                (click)="reset()"
                 routerLink="/chats"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row">
@@ -33,6 +37,7 @@
                 <div>Chats</div>
             </li>
             <li 
+                (click)="reset()"
                 routerLink="/saves"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row"
@@ -41,6 +46,7 @@
                 <div>Saves</div>
             </li>
             <li 
+                (click)="reset()"
                 routerLink="friends"
                 routerLinkActive="active"
                 class="sidebar__nav__list__row"

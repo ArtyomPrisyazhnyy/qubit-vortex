@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IProfile } from '../types/profile.interface';
 import { API_URL } from '../../environments/environments';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class ProfileService {
     };
 
     updateProfile(profileData: IProfile){
-        return this.http.put<IProfile>(`${API_URL}/users`, profileData)
+        return this.http.patch<IProfile>(`${API_URL}/users`, profileData)
             .pipe(
                 tap(profile => this.profile = profile)
             )

@@ -8,18 +8,19 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { FilesModule } from 'src/files/files.module';
+import { Tags } from 'src/tags/models/tags.model';
 
 @Module({
-  providers: [QuestionService],
-  controllers: [QuestionController],
-  imports: [
-    SequelizeModule.forFeature([User, Question]),
-    forwardRef(() => UsersModule),
-    JwtModule.register({
-      secret: jwtConstants.secret || 'SECRET',
-      signOptions: { expiresIn: '24h' },
-    }),
-    FilesModule,
-  ]
+    providers: [QuestionService],
+    controllers: [QuestionController],
+    imports: [
+        SequelizeModule.forFeature([User, Question, Tags]),
+        forwardRef(() => UsersModule),
+        JwtModule.register({
+        secret: jwtConstants.secret || 'SECRET',
+        signOptions: { expiresIn: '24h' },
+        }),
+        FilesModule,
+    ]
 })
 export class QuestionModule {}

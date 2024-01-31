@@ -14,21 +14,21 @@ import { FriendsModule } from 'src/friends/friends.module';
 import { Friends } from 'src/friends/models/friends.model';
 
 @Module({
-  controllers: [UsersController],
-  providers: [UsersService],
-  imports: [
-    SequelizeModule.forFeature([
-      User, 
-      Role, 
-      UserRoles, 
-      Question, 
-      Friends
-    ]),
-    RolesModule,
-    FilesModule,
-    forwardRef(() => AuthModule),
-    forwardRef(() => QuestionModule)
-  ],
-  exports: [UsersService]
+    controllers: [UsersController],
+    providers: [UsersService],
+    imports: [
+        SequelizeModule.forFeature([
+            User, 
+            Role, 
+            UserRoles, 
+            Question, 
+            Friends
+        ]),
+        RolesModule,
+        FilesModule,
+        forwardRef(() => AuthModule),
+        forwardRef(() => QuestionModule)
+    ],
+    exports: [UsersService]
 })
 export class UsersModule {}

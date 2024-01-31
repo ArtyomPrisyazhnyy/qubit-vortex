@@ -3,72 +3,122 @@
         <h2 class="home__header__title">
             All Questions
         </h2>
-        <a 
-            routerLink="/askQuestion"
-            class="home__header__btn"
-        >
+        <a routerLink="/askQuestion" class="home__header__btn">
             Ask a Question
         </a>
     </div>
 
-    <div class="home__questions">
-        @for(question of questionsService.questions.rows; track question.id){
-            <div class="home__questions__row">
-                <div class="home__questions__row__col">
-                    <div class="home__questions__row__col__line">
-                        0 votes
-                    </div>
-                    <div class="home__questions__row__col__line">
-                        0 answers
-                    </div>
-                    <div class="home__questions__row__col__line">
-                        4 views
-                    </div>
-                </div>
 
-                <div class="home__questions__row__col">
-                    <div 
-                        [routerLink]="'/question/' + question.id"
-                        class="home__questions__row__col__title"
-                    >
-                        {{ question.title }}
-                    </div>
-                    <div 
-                        class="home__questions__row__col__desc"
-                        [innerHTML]="question.fullDescription | inlineCode"
-                    >
-                    </div>
-                    <div class="home__questions__row__col__info">
-                        <div class="home__questions__row__col__info__tags">
-                            <div class="home__questions__row__col__info__tags__btn">
-                                java
-                            </div>
-                            <div class="home__questions__row__col__info__tags__btn">
-                                swagger
-                            </div>
-                            <div class="home__questions__row__col__info__tags__btn">
-                                spring
-                            </div>
-                        </div>
 
-                        <div class="home__questions__row__col__info__user">
-                            <div class="home__questions__row__col__info__user__avatar">
-                                <img [src]=" question.user.avatar ? API_URL + '/' + question.user.avatar : '../../../assets/images/defaultAvatar.svg'">
-                            </div>
-                            <div class="home__questions__row__col__info__user__nickname">
-                                {{question.user.nickname}}
-                            </div>
-                            <div class="home__questions__row__col__info__user__asked">
-                                asked 1 min ago
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+    <div class="home__settings">
+        <div class="home__settings__count">
+            {{this.questionsService.formattedQuestionCount}} {{ this.questionsService.formattedQuestionCount === '1' ?
+            'question' : 'questions'}}
+        </div>
+
+        <div class="home__settings__btns">
+            <div class="home__settings__btns__sort">
+                @for(criteria of orderCriteriaValues; track criteria){
+                    <button 
+                        class="home__settings__btns__sort__btn"
+                        [ngClass]="{'active': this.questionsService.Criteria === criteria}"
+                        (click)="changeCriteria(criteria)"
+                    >
+                        {{ criteria }}
+                    </button>
+                }
             </div>
+
+            <button class="home__settings__btns__filter">
+                <img src="../../../assets/images/homePage/filter.svg">
+                Filter
+            </button>
+        </div>
+    </div>
+
+
+
+    <div class="home__questions">
+        @for(question of questionsService.questions.rows | paginate : {
+                itemsPerPage: questionsService.activeLimit,
+                currentPage: questionsService.currentPage,
+                totalItems: questionsService.questions.count}; 
+        track question.id ){
+        <div class="home__questions__row">
+            <div class="home__questions__row__col">
+                <div class="home__questions__row__col__line">
+                    0 votes
+                </div>
+                <div class="home__questions__row__col__line">
+                    {{question.answersCount > 99 ? '99+' : question.answersCount}} {{question.answersCount === 1 ?
+                    'answer' : 'answers'}}
+                </div>
+                <div class="home__questions__row__col__line">
+                    {{question.views > 99 ? '99+' : question.views}} {{question.views === 1 ? 'view' : 'views'}}
+                </div>
+            </div>
+
+            <div class="home__questions__row__col">
+                <div 
+                    [routerLink]="'/question/' + question.id" 
+                    class="home__questions__row__col__title"
+                >
+                    {{ question.title }}
+                </div>
+                <div class="home__questions__row__col__desc"
+                    [innerHTML]="question.fullDescription | replaceSymbols | inlineCode">
+                </div>
+                <div class="home__questions__row__col__info">
+                    <div class="home__questions__row__col__info__tags">
+                        @for(tags of question.tags; track $index){
+                            <a class="home__questions__row__col__info__tags__btn">
+                                {{tags.tag}}
+                            </a>
+                        }
+                    </div>
+
+                    <div class="home__questions__row__col__info__user">
+                        <div class="home__questions__row__col__info__user__avatar">
+                            <img [src]=" question.user.avatar 
+                                        ? API_URL + '/' + question.user.avatar 
+                                        : '../../../assets/images/defaultAvatar.svg'" alt="avatar"
+                            >
+                        </div>
+                        <div class="home__questions__row__col__info__user__nickname">
+                            {{question.user.nickname}}
+                        </div>
+                        <div class="home__questions__row__col__info__user__asked">
+                            asked {{question.createdAt | customDate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         } @empty {
-            <div>
-                No questions found
+        <div>
+            No questions found
+        </div>
+        }
+        @if(!!questionsService.questions.rows.length){
+            <pagination-controls 
+                class="pagination-custom" 
+                (pageChange)="onPageChange($event)" 
+                previousLabel="Prev"
+                nextLabel="Next"
+            >
+            </pagination-controls>
+
+            <div class="limit">
+                @for (limit of questionsService.limits; track limit) {
+                    <button 
+                        class="limit__btn" 
+                        [class.active]="isActive(limit)" 
+                        (click)="setActiveLimit(limit)"
+                    >
+                        {{ limit }}
+                    </button>
+                }
+                <div class="limit__text">per page</div>
             </div>
         }
     </div>

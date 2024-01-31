@@ -1,0 +1,131 @@
+.users {
+  width: 948px;
+  font-family: 'Inter', sans-serif;
+}
+
+.users__title {
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 39px;
+}
+
+.users__settings {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 27px;
+}
+
+.users__settings__search {
+  margin-right: 211px;
+  border-radius: 6px;
+  border: 1px solid #D12525;
+  padding: 10px 0px 10px 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.users__settings__search__btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-right: 6px;
+}
+
+.users__settings__search__input {
+  color: #D12525;
+  width: 280px;
+}
+
+.users__settings__search__input::-webkit-input-placeholder {
+  color: rgba(209, 37, 37, 0.5);
+}
+
+.users__settings__search__input:-ms-input-placeholder {
+  color: rgba(209, 37, 37, 0.5);
+}
+
+.users__settings__search__input::-ms-input-placeholder {
+  color: rgba(209, 37, 37, 0.5);
+}
+
+.users__settings__search__input::placeholder {
+  color: rgba(209, 37, 37, 0.5);
+}
+
+.users__settings__sort {
+  border-radius: 6px;
+  border: 1px solid #FFC2C2;
+}
+
+.users__settings__sort__btn {
+  padding: 10px 12px;
+  border-left: 1px solid #FFC2C2;
+}
+
+.users__settings__sort__btn:first-child {
+  border: none;
+}
+
+.users__block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.users__block__user {
+  margin-top: 53px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 25%;
+}
+
+.users__block__user__avatar {
+  height: 105px;
+  width: 84px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 6px;
+}
+
+.users__block__user__info {
+  margin-left: 14px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.users__block__user__info__top__nickname {
+  margin-top: 8px;
+  color: #E93737;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.users__block__user__info__bottom {
+  background-color: #E93737;
+  border-radius: 6px;
+  color: #fff;
+  width: 60px;
+}
+/*# sourceMappingURL=users-page.component.css.map */

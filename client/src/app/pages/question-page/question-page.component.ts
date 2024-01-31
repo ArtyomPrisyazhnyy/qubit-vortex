@@ -11,6 +11,10 @@ import { DeleteQuestionComponent } from '../../Components/modal/delete-question/
 import { DeleteAnswerComponent } from '../../Components/modal/delete-answer/delete-answer.component';
 import { InlineCodePipe } from '../../pipes/inline-code.pipe';
 import { HighlightModule } from 'ngx-highlightjs';
+import { CustomDatePipe } from '../../pipes/custom-date-pipe.pipe';
+import { NewlineToBrPipe } from '../../pipes/newline-to-br-pipe.pipe';
+import { CustomAdvancedDatePipe } from '../../pipes/custom-andvanced-date.pipe';
+import { ReplaceSymbolsPipe } from '../../pipes/replace-symbols.pipe';
 //import { SanitizeHtmlPipe } from '../../pipes/sanitize-html-pipe.pipe';
 
 
@@ -24,7 +28,11 @@ import { HighlightModule } from 'ngx-highlightjs';
         DeleteQuestionComponent,
         DeleteAnswerComponent,
         InlineCodePipe,
-        //SanitizeHtmlPipe
+        NewlineToBrPipe,
+        //SanitizeHtmlPipe,
+        CustomDatePipe,
+        CustomAdvancedDatePipe,
+        ReplaceSymbolsPipe,
         HighlightModule
     ],
     templateUrl: './question-page.component.html',
@@ -59,8 +67,9 @@ export class QuestionPageComponent implements OnInit {
         this.route.params.subscribe(params => {
             this.questionId = params['id'];
             this.questionsService.getOneQuestion(this.questionId).subscribe(() => {
-            this.loading = false
-            })
+                this.loading = false;
+            });
+            this.questionsService.increaseViews(this.questionId).subscribe();
         });
     }
 

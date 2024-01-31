@@ -1,0 +1,224 @@
+.home {
+  width: 750px;
+}
+
+.home__header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  margin-bottom: 31px;
+}
+
+.home__header__title {
+  font-size: 26px;
+}
+
+.home__header__btn {
+  background-color: #E93737;
+  padding: 11px;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.home__header__btn:hover {
+  cursor: pointer;
+}
+
+.home__settings {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 40px;
+}
+
+.home__settings__count {
+  font-size: 16px;
+}
+
+.home__settings__btns {
+  font-size: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.home__settings__btns__sort {
+  border: 1px solid #FFC2C2;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.home__settings__btns__sort__btn {
+  padding: 10px;
+}
+
+.home__settings__btns__sort__btn:not(:first-child) {
+  border-left: 1px solid #FFC2C2;
+}
+
+.home__settings__btns__sort__btn.active {
+  background-color: #FFEEF1;
+}
+
+.home__settings__btns__filter {
+  position: relative;
+  border: 1px solid #D12525;
+  border-radius: 6px;
+  padding: 10px 10px 10px 30px;
+  color: #D12525;
+  margin-left: 16px;
+}
+
+.home__settings__btns__filter img {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.home__questions {
+  font-family: 'Inter', sans-serif;
+}
+
+.home__questions__row {
+  border-top: 1px solid #FFC2C2;
+  padding: 15px 16px 19px 62px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.home__questions__row__col:first-child {
+  margin-right: 17px;
+  min-width: 65px;
+}
+
+.home__questions__row__col:last-child {
+  width: 100%;
+}
+
+.home__questions__row__col__line {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 17px;
+  margin-bottom: 7px;
+}
+
+.home__questions__row__col__title {
+  font-weight: 400;
+  color: #D12525;
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 5px;
+}
+
+.home__questions__row__col__title:hover {
+  cursor: pointer;
+}
+
+.home__questions__row__col__desc {
+  font-size: 13px;
+  max-width: 590px;
+  margin-bottom: 8px;
+}
+
+.home__questions__row__col__info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.home__questions__row__col__info__tags {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.home__questions__row__col__info__tags__btn {
+  padding: 4px 7px;
+  background-color: #FFEEF1;
+  color: #E93737;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+
+.home__questions__row__col__info__user {
+  font-size: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.home__questions__row__col__info__user__avatar {
+  margin-right: 4px;
+}
+
+.home__questions__row__col__info__user__avatar img {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.home__questions__row__col__info__user__nickname {
+  color: #D12525;
+  margin-right: 15px;
+}
+
+.home__questions__row__col__info__user__nickname:hover {
+  cursor: pointer;
+}
+
+.limit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 60px;
+}
+
+.limit__btn {
+  margin-right: 4px;
+  border: 1px solid #BABFC5;
+  border-radius: 4px;
+  padding: 6px 9px;
+}
+
+.limit__btn:hover {
+  background-color: #e6e6e6;
+}
+
+.limit__btn.active {
+  border-color: #D12525;
+  background-color: #D12525;
+  color: #fff;
+}
+
+.limit__text {
+  margin-left: 9px;
+}
+/*# sourceMappingURL=home-page.component.css.map */

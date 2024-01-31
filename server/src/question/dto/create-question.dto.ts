@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { ArrayNotEmpty, ArrayUnique, IsString, isArray } from "class-validator";
 
 export class CreateQuestionDto {
     @ApiProperty({example: 'How to fix bug', description: 'Title of question'})
@@ -10,7 +10,8 @@ export class CreateQuestionDto {
     @IsString()
     readonly fullDescription: string;
 
-    @ApiProperty({example: '3', description: 'User Id'})
-    @IsNumber()
-    readonly userId: number;
+    @ApiProperty({example: [1, 2, 3], description: 'tag Ids'})
+    @ArrayNotEmpty()
+    @ArrayUnique()
+    tagIds: number[]; 
 }

@@ -1,12 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FilesService } from 'src/files/files.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Question } from './models/question.model';
 import OpenAI from 'openai';
 import { User } from 'src/users/models/users.model';
-import { Sequelize } from 'sequelize';
+import { Sequelize, WhereOptions } from 'sequelize';
 import { Answer } from './answer/models/answer.model';
+import { Op } from 'sequelize';
+import { Tags } from 'src/tags/models/tags.model';
+
+export enum OrderCriteria {
+    Newest = 'Newest',
+    Views = 'Views',
+    Unanswered = 'Unanswered'
+}
 
 @Injectable()
 export class QuestionService {
@@ -19,6 +27,7 @@ export class QuestionService {
 
     constructor(
         @InjectModel(Question) private questionRepository: typeof Question,
+        @InjectModel(Tags) private tagsRepository: typeof Tags,
         private fileService: FilesService,
         
     ){
@@ -51,17 +60,31 @@ export class QuestionService {
     }
 
 
-    async createQuestion(dto: CreateQuestionDto, image: any, userId: number) {
+    async createQuestion(
+        dto: CreateQuestionDto, 
+        image: any, 
+        userId: number,
+        //tagIds?: number[]
+    ) {
+        delete dto.tagIds;
         let fileName = null
         if (image){
             fileName = await this.fileService.createFile(image);
         }
+
+        // const tags = await this.tagsRepository.findAll({
+        //     where: {
+        //         id: tagIds
+        //     }
+        // })
         
         const question =  await this.questionRepository.create({
             ...dto,
             image: fileName,
             userId: userId
         } as CreateQuestionDto);
+
+        //await question.$set('tags', tags);
 
         // const prompt = `${dto.title}. ${dto.fullDescription}`;
         // const gptAnswer = await this.chatWithGPt(prompt);
@@ -71,21 +94,72 @@ export class QuestionService {
     }
 
 
-    async getAllQuestions(req: any){
-        let {limit} = req.query;
-        limit = limit || 20;
-        const questions = await this.questionRepository.findAndCountAll({
+    async getAllQuestions(
+        limit: string, 
+        page: string, 
+        searchQuestion: string, 
+        orderCriteria: OrderCriteria,
+        //tagsIds?: number[] 
+    ) : Promise<any> {
+        const pageSize = parseInt(limit, 10) || 15;
+        const currentPage = parseInt(page, 10) || 1;
+
+        let order: [string, 'ASC' | 'DESC'][] = [['id', 'DESC']];
+
+        switch (orderCriteria) {
+            case OrderCriteria.Views:
+                order = [['views', 'DESC'], ['id', 'DESC']];
+                break;
+            case OrderCriteria.Unanswered:
+                order = [['id', 'DESC']];
+                break;
+            default:
+                order = [['id', 'DESC']];
+                break;
+        }
+        
+
+        let whereCondition: WhereOptions<any> = {
+            [Op.or]: [
+                { title: { [Op.iLike]: `%${searchQuestion}%` } },
+                { fullDescription: { [Op.iLike]: `%${searchQuestion}%` } },
+            ],
+        };
+
+        if (orderCriteria === OrderCriteria.Unanswered) {
+            whereCondition = {
+                ...whereCondition,
+                id: Sequelize.literal(`
+                    NOT EXISTS (
+                        SELECT 1
+                        FROM "answer" AS "answers"
+                        WHERE "answers"."questionId" = "Question"."id"
+                    )
+                `)
+            };
+        }
+
+        const questions = await this.questionRepository.findAll({
+            order,
+            limit: pageSize,
+            offset: (currentPage - 1) * pageSize, 
+            where: whereCondition,
             include: [
                 {
                     model: User,
                     attributes: {
                         exclude: [
                             'email', 
-                            'password', 
+                            'password',
                             'createdAt', 
                             'updatedAt'
                         ]
                     }
+                },
+                {
+                    model: Tags,
+                    attributes: ['id', 'tag'], 
+                    through: { attributes: [] }
                 }
             ],
             attributes: {
@@ -97,12 +171,23 @@ export class QuestionService {
                     [
                         Sequelize.literal(`CASE WHEN LENGTH("fullDescription") <= 200 THEN "fullDescription" ELSE CONCAT(SUBSTRING("fullDescription", 1, 200), '...') END`),
                         'fullDescription',
-                      ],
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM "answer" AS "answers"
+                            WHERE "answers"."questionId" = "Question"."id"
+                        )`),
+                        'answersCount',
+                    ],
                 ]
             },
-            limit
-        })
-        return questions;
+        });
+
+        const totalCount = await this.questionRepository.count({
+            where: whereCondition
+        });
+        return {rows: questions, count: totalCount};
     }
 
     async getOneQuestion(id: number) {
@@ -119,6 +204,11 @@ export class QuestionService {
                             'updatedAt'
                         ]
                     }
+                },
+                {
+                    model: Tags,
+                    attributes: ['id', 'tag'], 
+                    through: { attributes: [] }
                 },
                 {
                     model: Answer,
@@ -146,5 +236,15 @@ export class QuestionService {
             where: {id}
         });
         return question
+    }
+
+    async increaseViews(questionId: number){
+        const question = await this.questionRepository.findByPk(questionId)
+        if(!question){
+            throw new NotFoundException("Question not found");
+        }
+        question.views += 1;
+        await question.save();
+        return question;
     }
 }

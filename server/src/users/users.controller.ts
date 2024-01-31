@@ -1,10 +1,8 @@
 import { UsersService } from './users.service';
-import { Body, Controller, Get, Param, Post, Put, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './models/users.model';
 import { UserDto } from './dto/user.dto';
-import { Roles } from 'src/auth/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UpdateUserInfoDto } from './dto/updateUserInfo.dto';
@@ -58,7 +56,7 @@ export class UsersController {
     @ApiResponse({status: 200})
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
-    @Put()
+    @Patch()
     updateUserInfo(
         @Body() updateUserInfoDto: UpdateUserInfoDto,
         @Req() req: any,

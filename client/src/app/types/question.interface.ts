@@ -7,10 +7,18 @@ interface ApiRow {
     id: number;
     title: string;
     fullDescription: string;
+    views: number;
     userId: number;
     createdAt: string;
     updatedAt: string;
+    answersCount: number;
     user: ApiUser;
+    tags: TagRow[]
+}
+
+interface TagRow{
+    id: number,
+    tag: string
 }
 
 interface ApiUser {
@@ -23,6 +31,7 @@ export interface IOneQuestion {
     id: number;
     title: string;
     fullDescription: string;
+    views: number;
     image: string | null;
     gptAnswer: string | null;
     userId: number;
@@ -34,6 +43,7 @@ export interface IOneQuestion {
         avatar: string;
     };
     answer: any[]; 
+    tags: TagRow[];
 }
 
 export interface IPostQuestion {

@@ -42,45 +42,45 @@ export class AuthService {
     
     signUp(userData: IAuthRegistrationUser) {
         return this.http.post<IToken>(`${API_URL}/auth/registration`, userData)
-        .pipe(
-            tap((res: IToken) => {
-                localStorage.setItem('token', res.token);
-                this.decodeToken(res.token);
-                this.isAuthSig.set(true)
-            }),
-            catchError(err => {
-                this.handeError(err)
-                throw new Error(err.message)
-            })
-        )
-        .subscribe(
-            () => {
-                this.toastr.success('created')
-                this.router.navigate(['/home'])
-            }
-        )
+            .pipe(
+                tap((res: IToken) => {
+                    localStorage.setItem('token', res.token);
+                    this.decodeToken(res.token);
+                    this.isAuthSig.set(true)
+                }),
+                catchError(err => {
+                    this.handeError(err)
+                    throw new Error(err.message)
+                })
+            )
+            .subscribe(
+                () => {
+                    this.toastr.success('created')
+                    this.router.navigate(['/home'])
+                }
+            )
     }
 
     login(userData: IAuthLoginUser) {
         return this.http.post<IToken>(`${API_URL}/auth/login`, userData)
-        .pipe(
-            tap((res: IToken) => {
-                localStorage.setItem('token', res.token);
-                this.decodeToken(res.token);
-                this.isAuthSig.set(true)
-            }),
+            .pipe(
+                tap((res: IToken) => {
+                    localStorage.setItem('token', res.token);
+                    this.decodeToken(res.token);
+                    this.isAuthSig.set(true)
+                }),
 
-            catchError(err => {
-                this.handeError(err)
-                throw new Error(err.message)
-            })
-        )
-        .subscribe(
-            () => {
-                this.toastr.success('Logged in')
-                this.router.navigate(['/home'])
-            }
-        )
+                catchError(err => {
+                    this.handeError(err)
+                    throw new Error(err.message)
+                })
+            )
+            .subscribe(
+                () => {
+                    this.toastr.success('Logged in')
+                    this.router.navigate(['/home'])
+                }
+            )
     }
 
     logout() {

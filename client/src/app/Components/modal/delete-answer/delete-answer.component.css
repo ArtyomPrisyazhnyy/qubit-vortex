@@ -1,0 +1,46 @@
+.modal__title {
+  color: #990C0C;
+  font-weight: 600;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.modal__description {
+  font-size: 18px;
+}
+
+.modal__bts {
+  margin-top: 24px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.modal__bts__btn {
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.modal__bts__btn--close {
+  color: grey;
+  border: 2px solid gray;
+  margin-right: 30px;
+}
+
+.modal__bts__btn--close:hover {
+  background-color: #f0f0f0;
+}
+
+.modal__bts__btn--delete {
+  color: #fff;
+  background-color: #990C0C;
+  border: 2px solid #990C0C;
+}
+
+.modal__bts__btn--delete:hover {
+  background-color: #a72a2a;
+  border-color: #a72a2a;
+}
+/*# sourceMappingURL=delete-answer.component.css.map */

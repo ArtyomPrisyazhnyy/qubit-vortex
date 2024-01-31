@@ -2,22 +2,30 @@
     <div class="header__container">
         <div 
             routerLink="/home"
-            class="header__Logo"
+            class="header__Logo unselectable"
         >
             <img src="../../../assets/images/Header/Logo.svg" alt="Q">
             <div class="header__Logo__title">UBITVORTEX</div>
         </div>
 
-        <label class="header__search">
-            <div class="header__search__btn">
+        <!-- Form for searching -->
+        <form 
+            class="header__search"
+            [formGroup]="searchData"
+            (ngSubmit)="onSubmit()"
+            (click)="activeSearch()"
+        >
+            <div class="header__search__btn unselectable">
                 <img src="../../../assets/images/Header/searchVector.svg" alt="Search">
             </div>
             <input 
+                #searchInput
+                formControlName="searchQuestion"
                 type="text" 
                 placeholder="Search..."
                 class="header__search__input"
             >
-        </label>
+        </form>
 
         @if(this.authService.isAuthSig()){
             <button

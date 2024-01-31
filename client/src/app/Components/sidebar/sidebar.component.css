@@ -1,0 +1,42 @@
+.sidebar {
+  width: 300px;
+  height: calc(100vh - 70px);
+  color: #fff;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.sidebar__nav__list {
+  margin-top: 50px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #E93737;
+}
+
+.sidebar__nav__list__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 0;
+}
+
+.sidebar__nav__list__row.active {
+  font-weight: 800;
+  background: -webkit-gradient(linear, left top, right top, from(#ffbcbc), to(rgba(255, 188, 188, 0)));
+  background: linear-gradient(to right, #ffbcbc, rgba(255, 188, 188, 0));
+  background-size: 90% 100%;
+  background-repeat: no-repeat;
+  border-top-left-radius: 21px;
+  border-bottom-left-radius: 21px;
+}
+
+.sidebar__nav__list__row:hover {
+  cursor: pointer;
+}
+
+.sidebar__nav__list__row img {
+  margin-left: 15px;
+  margin-right: 11px;
+}
+/*# sourceMappingURL=sidebar.component.css.map */
