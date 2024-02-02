@@ -49,13 +49,14 @@ export interface IOneQuestion {
 export interface IPostQuestion {
     title: string;
     fullDescription: string;
-    image: string | null
+    image: string | null;
+    tagIds: number[];
 }
 
 export interface IPostQuestionRes {
     id: number;
-    fullDescription: string;
     title: string;
+    fullDescription: string;
     image: string | null;
     userId: number;
     updatedAt: string;

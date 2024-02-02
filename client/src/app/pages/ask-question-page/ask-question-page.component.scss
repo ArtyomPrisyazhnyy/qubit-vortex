@@ -16,6 +16,7 @@
         padding: 46px 343px 46px 30px;
         background-color: #FDEDF1;
         margin-bottom: 48px;
+        border-radius: 6px;
 
         &__title{
             font-weight: 700;
@@ -69,6 +70,8 @@
         position: relative;
         padding: 46px 166px 46px 30px;
         background-color: #FDEDF1;
+        border-radius: 6px;
+        margin-bottom: 19px;
 
         &__title{
             font-weight: 700;
@@ -110,6 +113,84 @@
             bottom: 20px;
             color: #990C0C;
             font-weight: 600;
+        }
+    }
+
+    &__askTags{
+        padding: 46px 166px 46px 30px;
+        background-color: #FDEDF1;
+        border-radius: 6px;
+        position: relative;
+
+        &__title{
+            font-weight: 700;
+            line-height: 44px;
+            font-size: 32px;
+            color: #990C0C;
+        }
+
+        &__info{
+            font-weight: 400;
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        &__field{
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            height: 50px;
+            width: 820px;
+            border: 2px solid #990C0C;
+            border-radius: 6px;
+            background-color: #fff;
+
+            &:hover{
+                cursor: text;
+            }
+
+            &__selected{
+                background-color: #FDEDF1;
+                color: #D12525;
+                padding: 8px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                margin-right: 6px;
+
+                &__remove{
+                    margin-left: 4px;
+                    display: flex;
+                    align-items: center;
+                    img{
+                        width: 13px;
+                        height: 13px;
+                    }
+                }
+            }
+        }
+
+        &__drop{
+            margin-top: 10px;
+            background-color: #fff;
+            border: 2px solid #990C0C;
+            border-radius: 6px;
+            width: 820px;
+            padding: 8px;
+
+            &__txt{
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            &__tag{
+                border-radius: 6px;
+                background-color: #FDEDF1;
+                color: #D12525;
+                padding: 8px;
+                border-radius: 6px;
+                margin-right: 6px;
+            }
+
         }
     }
 

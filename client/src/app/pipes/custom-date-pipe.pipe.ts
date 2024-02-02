@@ -17,19 +17,23 @@ export class CustomDatePipe implements PipeTransform {
         const datePipe: DatePipe = new DatePipe('en-US');
 
         // Проверяем разницу во времени относительно текущего времени
-        if(dateDifference < 60000){
+        if (dateDifference < 60000){
             const secondsAgo = Math.floor(dateDifference / 1000);
             return `${secondsAgo} secs ago`;
 
-        } else if (dateDifference < 3600000) { // Менее часа назад
+        }
+        if (dateDifference < 3600000) { // Менее часа назад
             const minutesAgo = Math.floor(dateDifference / 60000);
             return `${minutesAgo} ${minutesAgo === 1 ? 'min' : 'mins'} ago`;
 
-        } else if (dateDifference < 86400000) { // Менее суток назад
+        } 
+        if (dateDifference < 86400000) { // Менее суток назад
             const hoursAgo = Math.floor(dateDifference / 3600000);
             return `${hoursAgo} ${hoursAgo === 1 ? 'hour' : 'hours'} ago`;
 
-        } else if (dateDifference < 259200000) { // Менее трех дней назад
+        } 
+        
+        if (dateDifference < 259200000) { // Менее трех дней назад
             const daysAgo = Math.floor(dateDifference / 86400000);
             return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
 

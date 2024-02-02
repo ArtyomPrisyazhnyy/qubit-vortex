@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { FilesService } from 'src/files/files.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -64,27 +64,37 @@ export class QuestionService {
         dto: CreateQuestionDto, 
         image: any, 
         userId: number,
-        //tagIds?: number[]
+        tagIds: number[]
     ) {
         delete dto.tagIds;
-        let fileName = null
+        let fileName = null;
+        if (tagIds.length > 5) {
+            throw new BadRequestException('More than 5 tags sent')
+        }
         if (image){
             fileName = await this.fileService.createFile(image);
         }
 
-        // const tags = await this.tagsRepository.findAll({
-        //     where: {
-        //         id: tagIds
-        //     }
-        // })
-        
         const question =  await this.questionRepository.create({
             ...dto,
             image: fileName,
             userId: userId
-        } as CreateQuestionDto);
+        } as any);
 
-        //await question.$set('tags', tags);
+        if (tagIds && tagIds.length > 0) {
+            const existingTags = await this.tagsRepository.findAll({
+                where: {
+                    id: tagIds
+                }
+            })
+
+            if(existingTags.length !== tagIds.length) {
+                throw new NotFoundException('One or more tags not found');
+            }
+            await question.$add('tags', tagIds);
+        } else {
+            throw new BadRequestException('TagsIds are required')
+        }
 
         // const prompt = `${dto.title}. ${dto.fullDescription}`;
         // const gptAnswer = await this.chatWithGPt(prompt);

@@ -42,19 +42,17 @@ export class HeaderComponent implements OnInit  {
         });
     }
 
-    onSubmit(){
+    onSubmit(): void{
         if(this.searchData.valid){
             this.questionService.updateCurrentPage(1);
-            this.questionService.setSerchQuestion(this.searchData.value.searchQuestion)
+            this.questionService.setSearchQuestion(this.searchData.value.searchQuestion)
 
-            this.router.navigate(['/home'])
-            
-            this.questionService.getAll(
-                this.questionService.activeLimit,
-                this.questionService.currentPage.toString(),
-                this.questionService.searchQustion,
-                this.questionService.Criteria
-            ).subscribe();
+            const path = this.router.url;
+            if(path !== '/home'){
+                this.router.navigate(['/home'])
+            }
+           
+            this.questionService.getAll().subscribe();
         } else {
             console.log('not valid')
         }

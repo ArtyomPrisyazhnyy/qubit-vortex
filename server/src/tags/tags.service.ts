@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Tags } from './models/tags.model';
 import { TagsDto } from './dto/tags.dto';
 import { Op, Sequelize, WhereOptions } from 'sequelize';
+import { Question } from 'src/question/models/question.model';
 
 export enum TagsCriteria {
     Popular = 'Popular',
@@ -32,6 +33,11 @@ export class TagsService {
         const pageSize = parseInt(limit, 10) || 10;
         const currentPage = parseInt(page, 10) || 1;
 
+        const today = new Date(); // Текущая дата и время
+        today.setHours(0, 0, 0, 0); // Установка времени на начало текущего дня
+        const lastWeekDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
+        const lastMonthDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+
         let order: [string, 'ASC' | 'DESC'][] = [['id', 'DESC']];
 
         switch(tagsCritetia) {
@@ -52,7 +58,7 @@ export class TagsService {
         }
 
         const whereCondition: WhereOptions<any> = {
-            tag: { [Op.iLike]: `%${searchTag}%` },
+            tag: { [Op.iLike]: `${searchTag}%` },
         };
 
         const tags = await this.tagsRepository.findAll({
@@ -69,9 +75,67 @@ export class TagsService {
                     Sequelize.literal(`CASE WHEN LENGTH("description") <= 180 THEN "description" ELSE CONCAT(SUBSTRING("description", 1, 180), '...') END`),
                     'description',
                 ]]
-            }
+            },
+            
+            include: [
+                {
+                    model: Question,
+                    through: { attributes: [] }
+                }
+            ]
         });
 
-        return tags;
+        const tagsWithQuestionCounts = await Promise.all(tags.map(async (tag: any) => {
+            const todayCount = await Question.count({
+                include: [{
+                    model: Tags,
+                    where: {
+                        id: tag.id
+                    }
+                }],
+                where: {
+                    createdAt: { [Op.gte]: today } // Все вопросы, созданные после начала текущего дня
+                }
+            })
+            const lastWeekCount = await Question.count({
+                include: [{
+                    model: Tags,
+                    where: {
+                        id: tag.id
+                    }
+                }],
+                where: {
+                    createdAt: { [Op.gte]: lastWeekDate }
+                }
+            });
+        
+            const lastMonthCount = await Question.count({
+                include: [{
+                    model: Tags,
+                    where: {
+                        id: tag.id
+                    }
+                }],
+                where: {
+                    createdAt: { [Op.gte]: lastMonthDate }
+                }
+            });
+        
+            return {
+                id: tag.id,
+                tag: tag.tag,
+                description: tag.description,
+                questionCount: tag.questions.length,
+                todayQuestionCount: todayCount,
+                lastWeekQuestionCount: lastWeekCount,
+                lastMonthQuestionCount: lastMonthCount
+            };
+        }));
+
+        const tagsCount = await this.tagsRepository.count({
+            where: whereCondition
+        });
+    
+        return {count: tagsCount, rows: tagsWithQuestionCounts};
     }
 }

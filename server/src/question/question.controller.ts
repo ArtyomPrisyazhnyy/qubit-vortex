@@ -25,8 +25,12 @@ export class QuestionController {
         @Req() req: any
     ): Promise<Question>{
         const userId = req.user.id;
-        return this.questionService.createQuestion(dto, image, userId,
-            //dto.tagIds
+        const tagIds: number[] = dto.tagIds;
+        return this.questionService.createQuestion(
+            dto, 
+            image, 
+            userId,
+            tagIds
         )
     }
 

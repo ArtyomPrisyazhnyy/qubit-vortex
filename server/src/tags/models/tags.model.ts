@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, Scopes, Table } from "sequelize-typescript";
 import { Question } from "src/question/models/question.model";
 import { QuestionTags } from "./question-tags.model";
 
@@ -8,6 +8,11 @@ interface TagsCreattionAttrs {
     description: string;
 }
 
+@Scopes(() => ({
+    questions: {
+        include: [{ model: Question, through: { attributes: [] } }]
+    }
+}))
 @Table({tableName: 'tags'})
 export class Tags extends Model<Tags, TagsCreattionAttrs>{
 

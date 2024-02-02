@@ -44,21 +44,13 @@ export class QuestionService {
         tags: []
     };
 
-    getAll(
-        limit: string, 
-        page: string, 
-        searchQuestion: string, 
-        orderCriteria: OrderCriteria
-    ): Observable<IQuestions> {
+    getAll(): Observable<IQuestions> {
         let params = new HttpParams()
-            .set('limit', limit)
-            .set('page', page)
-            .set('orderCriteria', orderCriteria);
+            .set('limit', this.activeLimit)
+            .set('page', this.currentPage)
+            .set('orderCriteria', this.Criteria)
+            .set('searchQuestion', this.searchQustion)
 
-        // Добавляем необязательный query параметр, если он передан
-        if (searchQuestion) {
-            params = params.set('searchQuestion', searchQuestion);
-        }
 
         return this.http.get<IQuestions>(`${API_URL}/question`, { params })
             .pipe(
@@ -67,18 +59,6 @@ export class QuestionService {
                 tap(questions => this.formatQuestionCount(questions.count))
                 
             )
-    }
-
-    updateCurrentPage(page: number): void {
-        this.currentPage = page;
-    }
-
-    updateActiveLimit(limit: string): void {
-        this.activeLimit = limit
-    }
-
-    setSerchQuestion(question: string): void {
-        this.searchQustion = question
     }
 
     getOneQuestion(id: string): Observable<IOneQuestion>{
@@ -115,6 +95,18 @@ export class QuestionService {
 
     updateCriteria(criteria: OrderCriteria): void {
         this.Criteria = criteria
+    }
+
+    updateCurrentPage(page: number): void {
+        this.currentPage = page;
+    }
+
+    updateActiveLimit(limit: string): void {
+        this.activeLimit = limit;
+    }
+
+    setSearchQuestion(question: string): void {
+        this.searchQustion = question;
     }
 
 }

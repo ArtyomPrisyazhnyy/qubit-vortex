@@ -30,23 +30,18 @@ export class HomePageComponent implements OnInit {
 
     loading = false;
     API_URL = API_URL;
-    currentPage: number = 1;
 
     orderCriteriaValues = Object.values(OrderCriteria);
 
     ngOnInit(): void {
-        this.currentPage = 1;
         this.loading = true;
+        this.questionsService.updateCurrentPage(1);
+        this.questionsService.updateCriteria(OrderCriteria.Newest)
         this.getAllQuestions();
     }
 
     getAllQuestions(): void {
-        this.questionsService.getAll(
-            this.questionsService.activeLimit, 
-            this.questionsService.currentPage.toString(),
-            this.questionsService.searchQustion,
-            this.questionsService.Criteria
-        ).subscribe(() => {
+        this.questionsService.getAll().subscribe(() => {
             this.loading = false;
             //console.log(this.questionsService.questions)
         });

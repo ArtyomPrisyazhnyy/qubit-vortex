@@ -20,18 +20,13 @@ export class SidebarComponent {
     ){}
 
     reset(){
-        this.questionService.setSerchQuestion('');
+        this.questionService.setSearchQuestion('');
         this.sharedService.clearInput();
         this.questionService.updateCurrentPage(1);
 
         const path = this.router.url;
         if(path === '/home'){
-            this.questionService.getAll(
-                this.questionService.activeLimit,
-                this.questionService.currentPage.toString(),
-                this.questionService.searchQustion,
-                this.questionService.Criteria
-            ).subscribe()
+            this.questionService.getAll().subscribe()
         }
     }
 }

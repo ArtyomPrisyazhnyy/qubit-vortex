@@ -4,7 +4,7 @@
 
 <form 
     [formGroup]="questionData"
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="cancelForm($event)"
     class="question"
 >
     <div class="question__askTitle">
@@ -76,15 +76,75 @@
 
     </div>
 
+</form>
+
+<div class="question">
+    <div class="question__askTags">
+        <div class="question__askTags__title">Tags</div>
+        <div class="question__askTags__info">
+            Add up to 5 tags to describe what your question is about. Start typing to see suggestions.
+        </div>
+        <div 
+            class="question__askTags__field"
+            (click)="activateInput()"
+        >
+            @for(selectedTag of selectedTags.rows; track selectedTag.id){
+                <span
+                    (click)="$event.stopPropagation()"
+                    class="question__askTags__field__selected"
+                >
+                    {{selectedTag.tag}}
+                    <button
+                        (click)="removeTag(selectedTag.id)"
+                        class="question__askTags__field__selected__remove"
+                    >
+                        <img src="../../../assets/images/askAQuestion/remove.svg" alt="x">
+                    </button>
+                </span>
+            }
+            <input 
+                id="myInput"
+                [formControl]="searchTagControl"
+                type="text"
+                placeholder="e.g. (Angular, Swift, Java)"
+            >
+        </div>
+        @if (this.showTagList) {
+            <div class="question__askTags__drop">
+                @if (!!this.foundTags.rows.length) {
+                    <div class="question__askTags__drop__txt">Found tags: </div>
+                }
+                @for (foundTag of this.foundTags.rows; track foundTag.id) {
+                    <button 
+                        (click)="addTag(foundTag.id)"
+                        class="question__askTags__drop__tag"
+                    >
+                        {{foundTag.tag}}
+                    </button>
+                    
+                } @empty {
+                    No tags found
+                }
+            </div>
+        }
+    </div>
+
     <div class="question__btns">
         <button 
             type="button"
             class="question__btns__btn question__btns__btn--discard"
-        >Discard draft</button>
+        >
+            Discard draft
+        </button>
         <button 
-            [disabled]="!questionData.valid"
+            (click)="onSubmit()"
+            [disabled]="!questionData.valid 
+                || selectedTags.rows.length < 1 
+                || selectedTags.rows.length > 5
+            "
             class="question__btns__btn question__btns__btn--post"
-        >Post a question</button>
+        >
+            Post a question
+        </button>
     </div>
-
-</form>
+</div>
