@@ -4,12 +4,21 @@
     </h2>
 
     <div class="users__settings">
-        <div class="users__settings__search">
+        <form 
+            class="users__settings__search"
+            [formGroup]="searchData"
+            (ngSubmit)="onSubmit()"
+        >
             <button class="users__settings__search__btn">
                 <img src="../../../assets/images/usersPage/SVG.svg">
             </button>
-            <input type="text" class="users__settings__search__input" placeholder="Search for users">
-        </div>
+            <input 
+                type="text"
+                class="users__settings__search__input"
+                placeholder="Search for users"
+                formControlName="searchUser"
+            >
+        </form>
 
         <div class="users__settings__sort">
             <button class="users__settings__sort__btn">
@@ -26,27 +35,75 @@
 
     <div class="users__block">
         @for(user of usersService.users; track user.id){
-            <div class="users__block__user">
+            <div class="users__block__item">
                 <img 
                     [src]="user.avatar
-                        ? API_URL + '/' + user.avatar
-                        : '../../../assets/images/defaultAvatar.svg'" 
-                    class="users__block__user__avatar"
+                    ? API_URL + '/' + user.avatar
+                    : '../../../assets/images/defaultAvatar.svg'" 
+                    class="users__block__item__avatar"
                 >
-    
-                <div class="users__block__user__info">
-                    <div class="users__block__user__info__top">
-                        <div class="users__block__user__info__top__nickname">
-                            {{user.nickname}}
-                        </div>
+                <div class="users__block__item__info">
+                    <div class="users__block__item__info__nickname">
+                        {{user.nickname}}
                     </div>
-                    
-                    <button
-                        (click)="sendRequest(user.id)"
-                        class="users__block__user__info__bottom"
-                    >
-                        add
-                    </button>
+
+                    @if (user.country) {
+                        <div class="users__block__item__info__desc">
+                            {{user.country}}
+                        </div>
+                    }
+                    <div class="users__block__item__info__btns">
+                        @if (!user.isPrivate || user.isFriend) {
+                            <a 
+                                class="users__block__item__info__btns__message"
+                                href="#"
+                            >Message</a>
+                        } @else {
+                            <div></div>
+                        }
+                        @if(user.isFriend){
+                            <button
+                                (click)="openModal()"
+                                class="users__block__item__info__btns__btn
+                                users__block__item__info__btns__btn--unfriend"
+                            >
+                                <img src="../../../assets/images/usersPage/unfriend.svg">
+                                Unfriend
+                            </button>
+                            @if(modalService.isOpen$ | async){
+                                <app-modal>
+                                    <app-unfriend
+                                        [userId]="user.id"
+                                    ></app-unfriend>
+                                </app-modal>
+                            }
+                        } @else if(user.isRequestSender) {
+                            <button
+                                (click)="accept(user.id)"
+                                class="users__block__item__info__btns__btn
+                                users__block__item__info__btns__btn--reply"
+                            >
+                                <img src="../../../assets/images/usersPage/reply.svg">
+                                Reply to request
+                            </button>
+                        } @else if(user.areYouSender) {
+                            <button
+                                class="users__block__item__info__btns__btn"
+                            >
+                                <img src="../../../assets/images/usersPage/sent.svg">
+                                Request sent
+                            </button>
+                        } @else {
+                            <button
+                                (click)="addFriend(user.id)"
+                                class="users__block__item__info__btns__btn"
+                                (click)="addFriend(user.id)"
+                            >
+                                <img src="../../../assets/images/usersPage/add.svg">
+                                Add friend
+                            </button>
+                        }
+                    </div>
                 </div>
             </div>
         }

@@ -12,21 +12,27 @@ export class UsersService {
         private readonly http: HttpClient
     ){}
 
-    users: IUSersPage[] = []
+    users: IUSersPage[] = [];
+    searchUser: string = '';
 
     getAllUsers(): Observable<IUSersPage[]>{
-        return this.http.get<IUSersPage[]>(`${API_URL}/users`, 
-        {
-            params: new HttpParams({
-                fromObject: {limit: 28}
-            })
-        }).pipe(
-            retry(2),
-            tap(users => this.users = users)
-        )
+        let params = new HttpParams()
+            .set('limit', 10)
+        if (this.searchUser) {
+            params = params.set('searchUser', this.searchUser)
+        }
+        return this.http.get<IUSersPage[]>(`${API_URL}/users`, {params})
+            .pipe(
+                retry(2),
+                tap(users => this.users = users)
+            )
     }
 
     getCurrentUser(): Observable<any>{
         return this.http.get<any>(`${API_URL}/users/currentUser`)
+    }
+
+    setSearch(nickname: string): void {
+        this.searchUser = nickname;
     }
 }

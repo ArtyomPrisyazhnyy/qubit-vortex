@@ -39,4 +39,9 @@ export interface IUSersPage{
     id: number,
     nickname: string;
     avatar: string | null;
+    country: string | null;
+    isPrivate: boolean,
+    isFriend: boolean,
+    isRequestSender: boolean,
+    areYouSender: boolean
 }

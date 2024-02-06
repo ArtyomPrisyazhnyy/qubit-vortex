@@ -1,5 +1,5 @@
 import { UsersService } from './users.service';
-import { Body, Controller, Get, Param, Patch, Post, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './models/users.model';
 import { UserDto } from './dto/user.dto';
@@ -30,8 +30,13 @@ export class UsersController {
     @ApiResponse({status: 200, type: [User]})
     @UseGuards(JwtAuthGuard)
     @Get()
-    getAll(@Request() req: any){
-        return this.UsersService.getAllUsers(req);
+    getAll(
+        @Req() req: any,
+        @Query('limit') limit: string = '10',
+        @Query('searchUser') searchUser: string = ''   
+    ){
+        const userId = req.user.id;
+        return this.UsersService.getAllUsers(limit, searchUser, userId);
     }
 
     @ApiOperation({summary: 'Get user by Id'})

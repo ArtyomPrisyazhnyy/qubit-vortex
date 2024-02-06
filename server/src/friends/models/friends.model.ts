@@ -7,26 +7,23 @@ interface FriendAttributes {
     friendId: number;
     status: 'pending' | 'accepted' | 'rejected';
 }
-  
-interface FriendCreationAttributes extends FriendAttributes {}
-
 
 @Table({ tableName: 'friends' })
-export class Friends extends Model<FriendAttributes, FriendCreationAttributes> {
+export class Friends extends Model<FriendAttributes, Friends> {
     @ForeignKey(() => User)
-    @Column
+    @Column({type: DataType.INTEGER})
     userId: number;
 
     @ForeignKey(() => User)
-    @Column
+    @Column({type: DataType.INTEGER})
     friendId: number;
 
     @Column({ type: DataType.STRING, defaultValue: 'pending' })
     status: string;
 
-    @BelongsTo(() => User, 'userId')
+    @BelongsTo(() => User, { foreignKey: 'userId', as: 'User' })
     user: User;
 
-    @BelongsTo(() => User, 'friendId')
+    @BelongsTo(() => User, { foreignKey: 'friendId', as: 'Friend' })
     friend: User;
 }

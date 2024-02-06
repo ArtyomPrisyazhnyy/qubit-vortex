@@ -20,9 +20,7 @@ export class TagsService {
     searchTag: string = '';
     tagsCriteria: TagsCriteria = TagsCriteria.Popular
 
-    getAllTags(
-        searchTag?: string
-    ): Observable<ITag>{
+    getAllTags(searchTag?: string): Observable<ITag>{
         let params = new HttpParams()
             .set('limit', 10)
             .set('page', this.currentTagPage)

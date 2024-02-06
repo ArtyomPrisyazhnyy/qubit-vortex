@@ -18,7 +18,7 @@ export class QuestionService {
     activeLimit: string = '15';
 
     currentPage: number = 1;
-    searchQustion: string = '';
+    searchQuestion: string = '';
 
     formattedQuestionCount: string = '0';
 
@@ -49,8 +49,10 @@ export class QuestionService {
             .set('limit', this.activeLimit)
             .set('page', this.currentPage)
             .set('orderCriteria', this.Criteria)
-            .set('searchQuestion', this.searchQustion)
 
+        if (this.searchQuestion) {
+            params = params.set('searchQuestion', this.searchQuestion)
+        }
 
         return this.http.get<IQuestions>(`${API_URL}/question`, { params })
             .pipe(
@@ -106,7 +108,8 @@ export class QuestionService {
     }
 
     setSearchQuestion(question: string): void {
-        this.searchQustion = question;
+        this.searchQuestion = question;
+        console.log(this.searchQuestion)
     }
 
 }

@@ -1,21 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Request } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Friends } from './models/friends.model';
 import { User } from 'src/users/models/users.model';
 import { AddFriendDto } from './dto/friends.dto';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 
+export enum FriendsCriteria {
+    AllFriends = 'All friends',
+    FriendsRequests = 'Friends requests'
+}
 
 @Injectable()
 export class FriendsService {
     constructor(
-        @InjectModel(Friends)
-        private friendsModel: typeof Friends,
+        @InjectModel(Friends) private friendsRepository: typeof Friends,
+        @InjectModel(User) private userRepository: typeof User
     ) {}
 
 
     async sendFriendRequest(userId: number, dto: AddFriendDto){
-        await this.friendsModel.create({
+        await this.friendsRepository.create({
             ...dto,
             userId,
             status: 'pending',
@@ -24,7 +28,7 @@ export class FriendsService {
 
 
     async acceptFriendRequest(userId: number, friendId: number) {
-        const friendRequest = await this.friendsModel.findOne({
+        const friendRequest = await this.friendsRepository.findOne({
             where: {
                 userId: friendId,
                 friendId: userId,
@@ -44,64 +48,128 @@ export class FriendsService {
 
 
     async declineFriendRequest(userId: number, friendId: number){
-        const friendRequest = await this.friendsModel.findOne({
+        const friendRequest = await this.friendsRepository.findOne({
             where: {
                 userId: friendId,
                 friendId: userId,
-                [Op.or]: [
-                    { status: 'pending' },
-                    { status: 'accepted' },
-                ],
+                status: 'pending'
             },
         });
         if (!friendRequest) {
             throw new NotFoundException('Friend request not found');
         }
 
-        friendRequest.status = 'accepted';
+        friendRequest.status = 'rejected';
         await friendRequest.save();
     }
 
-
-    async getFriendRequests(userId: number) {
-        const friendRequests = await this.friendsModel.findAll({
-            where: { 
-                friendId: userId, 
-                status: 'accepted', 
-            },
-            include: [{
-                model: User,
-                attributes: ['id', 'nickname', 'avatar']
-            }]
-        });
-
-        const friendRequestUserIds = friendRequests.map((request) => request.userId);
-        const users = await User.findAll({
-            where: { id: friendRequestUserIds },
-            attributes: ['id', 'nickname', 'avatar'],
-        });
-
-        return users;
-    }
-
-
-    async getAllFriends(userId: number) {
-        const friends = await this.friendsModel.findAll({
-            where: { 
+    async Unfriend(userId: number, friendId: number){
+        const friendStatus = await this.friendsRepository.findOne({
+            where: {
                 [Op.or]: [
-                    { userId: userId },
-                    { friendId: userId },
+                    {userId, friendId},
+                    {userId: friendId, friendId: userId}
                 ],
-                status: 'accepted' 
-            },
+                status: 'accepted'
+            }
         });
+        if (!friendStatus) {
+            throw new NotFoundException('Friend request not found');
+        }
 
-        const friendUserIds = friends.map((friend: any) => friend.friendId);
-        const users = await User.findAll({
-            where: { id: friendUserIds },
-            attributes: ['id', 'nickname', 'avatar'], 
-        });
-
-        return users;
+        friendStatus.status = 'rejected';
+        await friendStatus.save();
     }
+
+
+    async getFriendsRequestCount(userId: number) {
+        const requestCount = await this.friendsRepository.count({
+            where: {
+                friendId: userId,
+                status: 'pending'
+            }
+        });
+        return requestCount 
+    }
+
+
+    async getAllFriends(
+        userId: number, 
+        searchFriend: string,
+        friendsCriteria: FriendsCriteria
+    ) {
+        if (!friendsCriteria || friendsCriteria === FriendsCriteria.AllFriends){
+            const friends = await this.friendsRepository.findAll({
+                where: { 
+                    [Op.and]: [
+                        {
+                            [Op.or]: [
+                                { userId: userId },
+                                { friendId: userId },
+                            ],
+                        },
+                        {
+                            [Op.or]: [
+                                Sequelize.where(
+                                    Sequelize.fn('LOWER', Sequelize.col('User.nickname')),
+                                    'LIKE',
+                                    `${searchFriend.toLowerCase()}%`
+                                ),
+                                Sequelize.where(
+                                    Sequelize.fn('LOWER', Sequelize.col('Friend.nickname')),
+                                    'LIKE',
+                                    `${searchFriend.toLowerCase()}%`
+                                )
+                            ]
+                        },
+                        { status: 'accepted' }
+                    ]
+                },
+                include: [
+                    {
+                        model: User,
+                        as: "User"
+                    },
+                    {
+                        model: User,
+                        as: "Friend"
+                    }
+                ]
+            });
+    
+            const friendUserIds = friends.map((friend: any) => {
+                return friend.userId === userId ? friend.friendId : friend.userId;
+            });
+            const users = await this.userRepository.findAll({
+                where: { id: friendUserIds },
+                attributes: ['id', 'nickname', 'avatar', 'country'], 
+            });
+    
+            return users;
+        }
+
+        if(friendsCriteria === FriendsCriteria.FriendsRequests){
+            const friendRequests = await this.friendsRepository.findAll({
+                where: { 
+                    friendId: userId, 
+                    status: 'pending', 
+                },
+                include: [{
+                    model: User,
+                    as: 'User',
+                    attributes: ['id', 'nickname', 'avatar']
+                }]
+            });
+    
+            const friendRequestUserIds = friendRequests.map((request) => request.userId);
+            const users = await User.findAll({
+                where: { id: friendRequestUserIds },
+                attributes: ['id', 'nickname', 'avatar', 'country'],
+            });
+    
+            return users;
+        }
+        
+    }
+
 }

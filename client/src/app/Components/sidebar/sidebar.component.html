@@ -52,7 +52,18 @@
                 class="sidebar__nav__list__row"
             >
                 <img src="../../../assets/images/Sibebar/friends.svg" alt="">
-                <div>Friends</div>
+                <div
+                    class="sidebar__nav__list__row__hasCount"
+                >
+                @if (this.friendsService.friendRequestsCount && this.authService.isAuthSig()) {
+                    <div class="sidebar__nav__list__row__count">
+                        {{this.friendsService.friendRequestsCount > 99 
+                        ? '99+'
+                        : this.friendsService.friendRequestsCount}}
+                    </div>
+                }
+                    Friends
+                </div>
             </li>
         </ul>
     </nav>

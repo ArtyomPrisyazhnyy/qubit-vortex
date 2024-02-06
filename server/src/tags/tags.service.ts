@@ -16,7 +16,8 @@ export enum TagsCriteria {
 export class TagsService {
 
     constructor(
-        @InjectModel(Tags) private tagsRepository: typeof Tags
+        @InjectModel(Tags) private tagsRepository: typeof Tags,
+        @InjectModel(Question) private questionsRepository: typeof Question
     ){}
 
     async createTag(dto: TagsDto){
@@ -77,16 +78,14 @@ export class TagsService {
                 ]]
             },
             
-            include: [
-                {
-                    model: Question,
-                    through: { attributes: [] }
-                }
-            ]
+            include: [{
+                model: Question,
+                through: { attributes: [] }
+            }]
         });
 
         const tagsWithQuestionCounts = await Promise.all(tags.map(async (tag: any) => {
-            const todayCount = await Question.count({
+            const todayCount = await this.questionsRepository.count({
                 include: [{
                     model: Tags,
                     where: {
@@ -97,7 +96,7 @@ export class TagsService {
                     createdAt: { [Op.gte]: today } // Все вопросы, созданные после начала текущего дня
                 }
             })
-            const lastWeekCount = await Question.count({
+            const lastWeekCount = await this.questionsRepository.count({
                 include: [{
                     model: Tags,
                     where: {
@@ -109,7 +108,7 @@ export class TagsService {
                 }
             });
         
-            const lastMonthCount = await Question.count({
+            const lastMonthCount = await this.questionsRepository.count({
                 include: [{
                     model: Tags,
                     where: {

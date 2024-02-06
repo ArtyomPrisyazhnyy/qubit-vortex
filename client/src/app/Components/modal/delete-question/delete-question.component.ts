@@ -6,11 +6,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { QuestionPageComponent } from '../../../pages/question-page/question-page.component';
 
 @Component({
-  selector: 'app-delete-question',
-  standalone: true,
-  imports: [CommonModule, QuestionPageComponent],
-  templateUrl: './delete-question.component.html',
-  styleUrl: './delete-question.component.scss'
+    selector: 'app-delete-question',
+    standalone: true,
+    imports: [CommonModule, QuestionPageComponent],
+    templateUrl: './delete-question.component.html',
+    styleUrl: './delete-question.component.scss'
 })
 export class DeleteQuestionComponent {
     constructor(

@@ -1,1 +1,105 @@
-<p>friends-page works!</p>
+<div class="friends">
+    <h2 class="friends__title">Friends</h2>
+
+    <div class="friends__settings">
+        <form 
+            class="friends__settings__form"
+            [formGroup]="searchData"
+            (ngSubmit)="onSubmit()"
+        >
+            <img 
+                class="friends__settings__form__img"
+                src="../../../assets/images/tagsPage/searchsvg.svg"
+            >
+            <input 
+                type="text"
+                class="friends__settings__form__search"
+                placeholder="Filter by user"
+                formControlName="searchFriend"
+            >
+        </form>
+
+        <div class="friends__settings__sort">
+            @for (criteria of this.friendsCriteria; track criteria) {
+                <button 
+                    [ngClass]="{'active': this.friendsService.friendsCriteria === criteria}"
+                    (click)="changeCriteria(criteria)"
+                    class="friends__settings__sort__btn"
+                >
+                {{criteria}} 
+                @if (
+                        criteria === friendsEnum.FriendsRequests 
+                        && 
+                        this.friendsService.friendRequestsCount
+                    ) {
+                    <div class="friends__settings__sort__btn__count">
+                        {{this.friendsService.friendRequestsCount > 99 ? '99+' : this.friendsService.friendRequestsCount}}
+                    </div>
+                }
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="friends__list">
+        @for (friend of friendsService.friends; track friend.id) {
+            <div class="friends__list__item">
+                <div class="friends__list__item__user">
+                    <img 
+                        [src]="friend.avatar 
+                        ? API_URL + '/' + friend.avatar
+                        : '../../../assets/images/defaultAvatar.svg'"
+                        alt="avatar" 
+                        class="friends__list__item__user__avatar"
+                    >
+                    <div class="friends__list__item__user__info">
+                        <div class="friends__list__item__user__info__nickname">
+                            {{friend.nickname}}
+                        </div>
+
+                        @if (friend.country) {
+                            <div class="friends__list__item__user__info__country"
+                            >
+                                {{friend.country}}
+                            </div>
+                        }
+
+                        @if (this.friendsService.friendsCriteria === friendsEnum.AllFriends) {
+                            <div class="friends__list__item__user__info__btns">
+                                <a 
+                                    href="#" 
+                                    class="friends__list__item__user__info__message friends__list__item__user__info__message--accept"
+                                >Message</a>
+                                <button 
+                                    (click)="unfriend(friend.id)"
+                                    class="friends__list__item__user__info__message"
+                                >Unfriend</button>
+                            </div>
+
+                        }
+                        @if (this.friendsService.friendsCriteria === friendsEnum.FriendsRequests) {
+                            <div class="friends__list__item__user__info__btns">
+                                <button  
+                                    (click)="accept(friend.id)"
+                                    class="friends__list__item__user__info__message friends__list__item__user__info__message--accept"
+                                >Accept</button>
+                                <button 
+                                    (click)="decline(friend.id)"
+                                    class="friends__list__item__user__info__message"
+                                >Decline</button>
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        } @empty {
+            @if (this.friendsService.friendsCriteria === friendsEnum.AllFriends) {
+                No friends found
+            }
+            @if (this.friendsService.friendsCriteria === friendsEnum.FriendsRequests) {
+                No friend requests
+            }
+        }
+    </div>
+</div>

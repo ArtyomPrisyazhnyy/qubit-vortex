@@ -1,0 +1,21 @@
+<h3 class="modal__title">
+    Unfriend
+</h3>
+<div class="modal__description">
+    are you sure you want to unfriend this user?
+</div>
+
+<div class="modal__bts">
+    <button 
+        (click)="modalService.closeModal()"
+        class="modal__bts__btn modal__bts__btn--close"
+    >
+        Cancel
+    </button>
+    <button 
+        (click)="unfriend()"
+        class="modal__bts__btn modal__bts__btn--delete"
+    >
+        Delete
+    </button>
+</div>

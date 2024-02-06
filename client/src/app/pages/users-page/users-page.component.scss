@@ -10,7 +10,7 @@
 
     &__settings{
         display: flex;
-        margin-bottom: 27px;
+        margin-bottom: 34px;
 
         &__search{
             margin-right: 211px;
@@ -52,43 +52,80 @@
     }
 
     &__block{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-
-        &__user{
-            margin-top: 53px;
+        margin-top: 50px;
+        &__item{
+            width: 842px;
             display: flex;
-            width: 25%;
+
+            &:not(:last-child){
+                border-bottom: 1px solid #FFC2C2;
+                padding-bottom: 30px;
+            }
+            &:not(:first-child){
+                padding-top: 30px;
+            }
 
             &__avatar{
-                height: 105px;
-                width: 84px;
-                object-fit: cover;
-                border-radius: 6px;
+                border-radius: 50%;
+                width: 165px;
+                height: 165px;
+                margin-right: 22px;
             }
             &__info{
-                margin-left: 14px;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+                width: 100%;
 
-                &__top{
-                    &__nickname{
-                        margin-top: 8px;
-                        color: #E93737;
-                        font-weight: 700;
-                        font-size: 16px;
-                    }
+                &__nickname{
+                    font-weight: 700;
+                    font-size: 27px;
+                    color: #E93737;
                 }
 
-                &__bottom{
-                    background-color:#E93737;
-                    border-radius: 6px;
-                    color: #fff;
-                    width: 60px;
+                &__btns{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    align-content: center;
+                    width: 100%;
+
+                    &__message{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 131px;
+                        height: 29px;
+                        border-radius: 6px;
+                        border: 1px solid #D12525;
+                        color: #D12525;
+                        font-size: 16px;
+                    }
+
+                    &__btn{
+                        width: 174px;
+                        height: 36px;
+                        border-radius: 6px;
+                        background-color: #E93737;
+                        color: #fff;
+                        font-size: 16px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        &--unfriend{
+                            background-color: rgba($color: #000000, $alpha: .5);
+                        }
+                        &--reply{
+                            background-color: #D12525;
+                        }
+                        img{
+                            margin-right: 10px;
+                        }
+                    }
                 }
             }
         }
     }
+
 }

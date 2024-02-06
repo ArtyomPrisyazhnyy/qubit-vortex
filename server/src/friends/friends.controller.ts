@@ -1,5 +1,5 @@
-import { Controller, Post, Param, UseGuards, Get, Body, Req, Delete, Put } from '@nestjs/common';
-import { FriendsService } from './friends.service';
+import { Controller, Post, Param, UseGuards, Get, Body, Req, Delete, Put, Query, Patch } from '@nestjs/common';
+import { FriendsCriteria, FriendsService } from './friends.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/users/models/users.model';
@@ -26,7 +26,7 @@ export class FriendsController {
 
     @ApiOperation({summary: "Accept friend request"})
     @UseGuards(JwtAuthGuard)
-    @Put('accept-request')
+    @Patch('accept-request')
     acceptFriendRequest(
         @Body() dto: AddFriendDto,
         @Req() req: any,
@@ -38,32 +38,47 @@ export class FriendsController {
 
     @ApiOperation({summary: "Decline friend request"})
     @UseGuards(JwtAuthGuard)
-    @Put('decline-request/:friendId')
+    @Patch('decline-request')
     declineFriendRequest(
         @Req() req: any,
-        @Param('friendId') friendId: number
+        @Body() dto: AddFriendDto,
     ){
         const userId = req.user.id;
+        const friendId = dto.friendId
         return this.friendsService.declineFriendRequest(userId, friendId);
     }
 
-    @ApiOperation({summary: "Get friend requests"})
+    @ApiOperation({summary: "Unfriend"})
     @UseGuards(JwtAuthGuard)
-    @Get('requests')
-    getFriendRequests(
-        @Req() req: any
-    ): Promise<User[]> {
+    @Patch('unfriend')
+    Unfriend(
+        @Req() req: any,
+        @Body() dto: AddFriendDto,
+    ){
         const userId = req.user.id;
-        return this.friendsService.getFriendRequests(userId);
+        const friendId = dto.friendId
+        return this.friendsService.Unfriend(userId, friendId);
+    }
+
+    @ApiOperation({summary: "Get friend request cound"})
+    @UseGuards(JwtAuthGuard)
+    @Get('requests-count')
+    getRequestsCount(
+        @Req() req: any
+    ){
+        const userId = req.user.id
+        return this.friendsService.getFriendsRequestCount(userId)
     }
 
     @ApiOperation({summary: "Get all friends"})
     @UseGuards(JwtAuthGuard)
     @Get('list')
     getFriends(
-        @Req() req: any
-    ): Promise<User[]> {
+        @Req() req: any,
+        @Query('searchFriend') searchFriend: string = '',
+        @Query('friendsCriteria') friendsCriteria: FriendsCriteria = FriendsCriteria.AllFriends
+    ) {
         const userId = req.user.id;
-        return this.friendsService.getAllFriends(userId);
+        return this.friendsService.getAllFriends(userId, searchFriend, friendsCriteria);
     }
 }

@@ -11,6 +11,10 @@ interface UserCreationAttrs {
     password: string;
     nickname: string;
     image: string;
+    country: string | null;
+    aboutMe: string | null;
+    links: string | null;
+    isPrivate: boolean;
 }
 
 @Table({tableName: 'users'})
@@ -48,6 +52,10 @@ export class User extends Model<User, UserCreationAttrs>{
     @Column({type: DataType.TEXT, allowNull: true})
     links: string;
 
+    @ApiProperty({example: false, description: "Is private account"})
+    @Column({type: DataType.BOOLEAN, allowNull: false, defaultValue: false})
+    isPrivate: boolean;
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 
@@ -57,6 +65,13 @@ export class User extends Model<User, UserCreationAttrs>{
     @HasMany(() => Answer)
     answer: Answer[]
 
-    @HasMany(() => Friends)
+    @HasMany(() => Friends, {as: 'UserFriends'})
     friends: Friends[]
+
+    @HasMany(() => Friends, {as: 'recieviedFriendReq'})
+    recieviedFriendReq: Friends[]
+
+    @HasMany(() => Friends, {as: 'sentFriendReq'})
+    sentFriendReq: Friends[]
+
 }
