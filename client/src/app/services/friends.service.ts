@@ -34,7 +34,7 @@ export class FriendsService {
     }
 
     unfriend(friendId: number){
-        return this.http.patch(`${API_URL}/friends/unfriend`, {friendId: friendId})
+        return this.http.delete(`${API_URL}/friends/unfriend/${friendId}`)
     }
 
 

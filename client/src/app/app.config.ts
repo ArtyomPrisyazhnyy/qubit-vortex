@@ -8,6 +8,9 @@ import { provideToastr } from 'ngx-toastr';
 import { LoggerInterceptor } from './interceptors/logger.interceptor';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+
+const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}}
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -18,6 +21,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimations(),
         importProvidersFrom(
             MatSelectCountryModule.forRoot('en'),
+            SocketIoModule.forRoot(config)
         )
     ]
 };

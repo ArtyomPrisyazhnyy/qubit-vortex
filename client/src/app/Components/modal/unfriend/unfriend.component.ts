@@ -25,6 +25,7 @@ export class UnfriendComponent {
         this.friendsService.unfriend(this.userId).subscribe({
             next: () => {
                 this.modalService.closeModal();
+                
                 const path = this.router.url;
                 if (path === '/users'){
                     this.usersService.getAllUsers().subscribe();

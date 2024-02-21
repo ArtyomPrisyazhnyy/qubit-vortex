@@ -17,7 +17,8 @@ export interface UserWithFriendshipStatus {
     isPrivate: boolean,
     isFriend: boolean;
     isRequestSender: boolean;
-    areYouSender: boolean
+    areYouSender: boolean;
+    areYou: boolean;
 }
 
 @Injectable()
@@ -81,7 +82,8 @@ export class UsersService {
         for (const user of users) {
             const isFriend = await this.isUserFriend(userId, user.id);
             const isRequestSender = await this.isUserRequestSender(user.id, userId);
-            const areYouSender = await this.isUserRequestSender(userId, userId);
+            const areYouSender = await this.isUserRequestSender(userId, user.id);
+            const areYou = (userId === user.id);
     
             const userWithStatus: UserWithFriendshipStatus = {
                 id: user.id,
@@ -91,7 +93,8 @@ export class UsersService {
                 isPrivate: user.isPrivate,
                 isFriend,
                 isRequestSender,
-                areYouSender
+                areYouSender,
+                areYou
             };
     
             usersWithStatus.push(userWithStatus);
@@ -119,7 +122,10 @@ export class UsersService {
             where: {
                 userId,
                 friendId,
-                status: 'pending',
+                [Op.or]: [
+                    {status: 'pending'},
+                    {status: 'reject'}
+                ]
             }
         });
     

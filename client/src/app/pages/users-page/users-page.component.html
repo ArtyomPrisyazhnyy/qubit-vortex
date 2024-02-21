@@ -53,56 +53,60 @@
                         </div>
                     }
                     <div class="users__block__item__info__btns">
-                        @if (!user.isPrivate || user.isFriend) {
-                            <a 
-                                class="users__block__item__info__btns__message"
-                                href="#"
-                            >Message</a>
+                        @if(user.areYou){
+                            <div>You</div>
                         } @else {
-                            <div></div>
-                        }
-                        @if(user.isFriend){
-                            <button
-                                (click)="openModal()"
-                                class="users__block__item__info__btns__btn
-                                users__block__item__info__btns__btn--unfriend"
-                            >
-                                <img src="../../../assets/images/usersPage/unfriend.svg">
-                                Unfriend
-                            </button>
-                            @if(modalService.isOpen$ | async){
-                                <app-modal>
-                                    <app-unfriend
-                                        [userId]="user.id"
-                                    ></app-unfriend>
-                                </app-modal>
+                            @if (!user.isPrivate || user.isFriend) {
+                                <a 
+                                    class="users__block__item__info__btns__message"
+                                    href="#"
+                                >Message</a>
+                            } @else {
+                                <div></div>
                             }
-                        } @else if(user.isRequestSender) {
-                            <button
-                                (click)="accept(user.id)"
-                                class="users__block__item__info__btns__btn
-                                users__block__item__info__btns__btn--reply"
-                            >
-                                <img src="../../../assets/images/usersPage/reply.svg">
-                                Reply to request
-                            </button>
-                        } @else if(user.areYouSender) {
-                            <button
-                                class="users__block__item__info__btns__btn"
-                            >
-                                <img src="../../../assets/images/usersPage/sent.svg">
-                                Request sent
-                            </button>
-                        } @else {
-                            <button
-                                (click)="addFriend(user.id)"
-                                class="users__block__item__info__btns__btn"
-                                (click)="addFriend(user.id)"
-                            >
-                                <img src="../../../assets/images/usersPage/add.svg">
-                                Add friend
-                            </button>
+                            @if(user.isFriend){
+                                <button
+                                    (click)="openModal()"
+                                    class="users__block__item__info__btns__btn
+                                    users__block__item__info__btns__btn--unfriend"
+                                >
+                                    <img src="../../../assets/images/usersPage/unfriend.svg">
+                                    Unfriend
+                                </button>
+                                @if(modalService.isOpen$ | async){
+                                    <app-modal>
+                                        <app-unfriend
+                                            [userId]="user.id"
+                                        ></app-unfriend>
+                                    </app-modal>
+                                }
+                            } @else if(user.isRequestSender) {
+                                <button
+                                    (click)="accept(user.id)"
+                                    class="users__block__item__info__btns__btn
+                                    users__block__item__info__btns__btn--reply"
+                                >
+                                    <img src="../../../assets/images/usersPage/reply.svg">
+                                    Reply to request
+                                </button>
+                            } @else if(user.areYouSender) {
+                                <button
+                                    class="users__block__item__info__btns__btn"
+                                >
+                                    <img src="../../../assets/images/usersPage/sent.svg">
+                                    Request sent
+                                </button>
+                            } @else {
+                                <button
+                                    (click)="addFriend(user.id)"
+                                    class="users__block__item__info__btns__btn"
+                                >
+                                    <img src="../../../assets/images/usersPage/add.svg">
+                                    Add friend
+                                </button>
+                            }
                         }
+                        
                     </div>
                 </div>
             </div>

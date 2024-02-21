@@ -1,1 +1,21 @@
-<p>chats-page works!</p>
+<div class="chats">
+    <h2 class="chats__title">Chats</h2>
+
+    <!-- @for (message of messages; track $index) {
+        <p>{{message}}</p>
+    } -->
+    <form 
+        [formGroup]="messageData"
+        (ngSubmit)="onSubmit()"
+    >
+        <input 
+            formControlName="message"
+            type="text" 
+            required
+            placeholder="type message..."
+        >
+        <button [disabled]="!messageData.valid" type="submit" shape>
+            send message
+        </button>
+    </form>
+</div>

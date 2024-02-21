@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException, Request } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, Request } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Friends } from './models/friends.model';
 import { User } from 'src/users/models/users.model';
 import { AddFriendDto } from './dto/friends.dto';
-import { Op, Sequelize } from 'sequelize';
+import { Error, Op, Sequelize } from 'sequelize';
 
 export enum FriendsCriteria {
     AllFriends = 'All friends',
@@ -18,12 +18,24 @@ export class FriendsService {
     ) {}
 
 
-    async sendFriendRequest(userId: number, dto: AddFriendDto){
-        await this.friendsRepository.create({
-            ...dto,
+    async sendFriendRequest(userId: number, friendId: number){
+        const alreadyCreated = await this.friendsRepository.findOne({
+            where: {
+                [Op.or]: [
+                    {userId, friendId},
+                    {userId: friendId, friendId: userId}
+                ],
+            }
+        })
+        if(alreadyCreated){
+            throw new HttpException('Forbidden: the record already exists in the database', HttpStatus.FORBIDDEN);
+        }
+        const friendReq = await this.friendsRepository.create({
+            friendId,
             userId,
             status: 'pending',
         });
+        return friendReq;
     }
 
 
@@ -64,7 +76,7 @@ export class FriendsService {
     }
 
     async Unfriend(userId: number, friendId: number){
-        const friendStatus = await this.friendsRepository.findOne({
+        const friendStatus = await this.friendsRepository.destroy({
             where: {
                 [Op.or]: [
                     {userId, friendId},
@@ -77,8 +89,7 @@ export class FriendsService {
             throw new NotFoundException('Friend request not found');
         }
 
-        friendStatus.status = 'rejected';
-        await friendStatus.save();
+        return friendStatus
     }
 
 

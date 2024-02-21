@@ -77,4 +77,14 @@ export class AuthService implements OnModuleInit  {
         throw new UnauthorizedException({message: 'Incorrect password'})
         
     }
+
+    async getJwtUser(jwt: string) {
+        try {
+            const decodedToken = await this.jwtService.verifyAsync(jwt);
+            return decodedToken;
+        } catch (error) {
+            console.error('Error verifying JWT:', error);
+            return null;
+        }
+    }
 }

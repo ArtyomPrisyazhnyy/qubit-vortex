@@ -11,6 +11,7 @@ import { QuestionPageComponent } from './pages/question-page/question-page.compo
 import { AskQuestionPageComponent } from './pages/ask-question-page/ask-question-page.component';
 import { ChatsPageComponent } from './pages/chats-page/chats-page.component';
 import { UpdateProfilePageComponent } from './pages/update-profile-page/update-profile-page.component';
+import { ChatRoomPageComponent } from './pages/chat-room-page/chat-room-page.component';
 
 export const routes: Routes = [
     {
@@ -56,6 +57,11 @@ export const routes: Routes = [
     {
         path: 'chats', 
         component: ChatsPageComponent,
+        canActivate: [authGuard()]
+    },
+    {
+        path: 'chats/:id',
+        component: ChatRoomPageComponent,
         canActivate: [authGuard()]
     },
     {

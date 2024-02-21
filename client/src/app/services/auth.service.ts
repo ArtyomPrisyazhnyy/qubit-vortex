@@ -28,6 +28,23 @@ export class AuthService {
         }
     }
 
+    getUserAvatar(){
+        if(this.isAuthSig()){
+            this.decodeToken(localStorage.getItem('token'));
+            console.log(this.currentUser)
+        }
+    }
+
+    getUserId(): number | null {
+        if(this.isAuthSig()){
+            this.decodeToken(localStorage.getItem('token'));
+            if(this.currentUser){
+                return this.currentUser.id
+            }
+        }
+        return null
+    }
+
     decodeToken(token: string | null): any {
         try {
             if(token){

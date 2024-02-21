@@ -34,15 +34,13 @@
             >
                 log out
             </button>
-            <div 
-                class="header__avatar"
+            <img
                 routerLink="/profile"
+                class="header__avatar"
+                [src]="authService.currentUser?.avatar
+                ? API_URL + '/' + authService.currentUser?.avatar
+                : '../../../assets/images/defaultAvatar.svg'"
             >
-                <img
-                    class="header__avatar__img"
-                    src="../../../assets/images/IMG_20230907_220212_820.jpg"
-                >
-            </div>
         } @else {
             <div class="header__links">
                 <a 

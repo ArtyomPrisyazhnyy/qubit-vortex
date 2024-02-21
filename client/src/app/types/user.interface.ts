@@ -28,6 +28,7 @@ export interface UserRole {
   
 
 export interface IUserFromToken {
+    avatar: string;
     email: string;
     id: number;
     roles: UserRole[];
@@ -36,12 +37,13 @@ export interface IUserFromToken {
 }
 
 export interface IUSersPage{
-    id: number,
+    id: number;
     nickname: string;
     avatar: string | null;
     country: string | null;
-    isPrivate: boolean,
-    isFriend: boolean,
-    isRequestSender: boolean,
-    areYouSender: boolean
+    isPrivate: boolean;
+    isFriend: boolean;
+    isRequestSender: boolean;
+    areYouSender: boolean;
+    areYou: boolean;
 }

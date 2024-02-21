@@ -5,6 +5,9 @@ import { UserRoles } from "src/roles/user-roles.model";
 import { Question } from "src/question/models/question.model";
 import { Answer } from "src/question/answer/models/answer.model";
 import { Friends } from "src/friends/models/friends.model";
+import { Conversation } from "src/chat/models/conversation.model";
+import { Message } from "src/chat/models/message.model";
+import { UserConversation } from "src/chat/models/user-conversation.model";
 
 interface UserCreationAttrs {
     email: string;
@@ -74,4 +77,10 @@ export class User extends Model<User, UserCreationAttrs>{
     @HasMany(() => Friends, {as: 'sentFriendReq'})
     sentFriendReq: Friends[]
 
+
+    @BelongsToMany(() => Conversation, () => UserConversation)
+    conversations: Conversation[];
+
+    @HasMany(() => Message)
+    messages: Message[];
 }

@@ -21,7 +21,8 @@ export class FriendsController {
         @Req() req: any,
     ) {
         const userId = req.user.id;
-        return this.friendsService.sendFriendRequest(userId, dto);
+        const friendId = dto.friendId
+        return this.friendsService.sendFriendRequest(userId, friendId);
     }
 
     @ApiOperation({summary: "Accept friend request"})
@@ -50,13 +51,12 @@ export class FriendsController {
 
     @ApiOperation({summary: "Unfriend"})
     @UseGuards(JwtAuthGuard)
-    @Patch('unfriend')
+    @Delete('unfriend/:id')
     Unfriend(
         @Req() req: any,
-        @Body() dto: AddFriendDto,
+        @Param('id') friendId: number,
     ){
         const userId = req.user.id;
-        const friendId = dto.friendId
         return this.friendsService.Unfriend(userId, friendId);
     }
 

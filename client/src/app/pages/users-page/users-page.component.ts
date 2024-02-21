@@ -65,9 +65,12 @@ export class UsersPageComponent implements OnInit {
             })
     }
     accept(friendId: number){
-        this.friendsService.acceptFriendRequest(friendId).subscribe(
-            () => this.usersService.getAllUsers().subscribe()
-        )
+        this.friendsService.acceptFriendRequest(friendId).subscribe({
+            next: () => {
+                this.usersService.getAllUsers().subscribe()
+            },
+            error: error => console.error('error accepting request: ', error)
+        })
     }
     openModal(){
         this.modalService.openModal();

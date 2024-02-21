@@ -18,53 +18,62 @@ import { AnswerModule } from './question/answer/answer.module';
 import { Answer } from './question/answer/models/answer.model';
 import { Friends } from './friends/models/friends.model';
 import { FriendsModule } from './friends/friends.module';
-//import { AppGateway } from './app.gateway';
 import { TagsModule } from './tags/tags.module';
 import { Tags } from './tags/models/tags.model';
 import { QuestionTags } from './tags/models/question-tags.model';
+import { ChatModule } from './chat/chat.module';
+import { Message } from './chat/models/message.model';
+import { Conversation } from './chat/models/conversation.model';
+import { ActiveConversation } from './chat/models/active-conversation.model';
+import { UserConversation } from './chat/models/user-conversation.model';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env'
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'public'),
-      serveRoot: '/'
-    }),
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      models: [
-        User,
-        UserRoles,
-        Role,
-        Question,
-        Answer,
-        Friends,
-        Tags,
-        QuestionTags
-      ],
-      autoLoadModels: true,
-      synchronize: true
-    }),
-    UsersModule,
-    RolesModule,
-    AuthModule,
-    QuestionModule,
-    FilesModule,
-    AnswerModule,
-    FriendsModule,
-    TagsModule
-  ],
-  controllers: [AppController],
-  providers: [
-    AppService,
-   // AppGateway,
-  ],
+    imports: [
+        ConfigModule.forRoot({
+            envFilePath: '.env'
+        }),
+        ServeStaticModule.forRoot({
+            rootPath: path.join(__dirname, '..', 'public'),
+            serveRoot: '/'
+        }),
+        SequelizeModule.forRoot({
+            dialect: 'postgres',
+            host: process.env.POSTGRES_HOST,
+            port: Number(process.env.POSTGRES_PORT),
+            username: process.env.POSTGRES_USER,
+            password: process.env.POSTGRES_PASSWORD,
+            database: process.env.POSTGRES_DB,
+            models: [
+                User,
+                UserRoles,
+                Role,
+                Question,
+                Answer,
+                Friends,
+                Tags,
+                QuestionTags,
+                Message,
+                Conversation,
+                ActiveConversation,
+                UserConversation
+            ],
+            autoLoadModels: true,
+            synchronize: true
+        }),
+        UsersModule,
+        RolesModule,
+        AuthModule,
+        QuestionModule,
+        FilesModule,
+        AnswerModule,
+        FriendsModule,
+        TagsModule,
+        ChatModule
+    ],
+    controllers: [AppController],
+    providers: [
+        AppService,
+    // AppGateway,
+    ],
 })
 export class AppModule {}

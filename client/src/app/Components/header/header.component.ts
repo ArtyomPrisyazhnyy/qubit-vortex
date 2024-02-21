@@ -1,3 +1,4 @@
+import { API_URL } from './../../../environments/environments';
 import { SharedService } from './../../services/shared.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,7 +18,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit  {
     @ViewChild('searchInput') searchInput!: ElementRef;
     searchData: FormGroup;
-
+    API_URL = API_URL;
+    
     constructor(
         public authService: AuthService,
         private questionService: QuestionService,
@@ -32,6 +34,7 @@ export class HeaderComponent implements OnInit  {
     }
 
     ngOnInit(): void {
+        this.authService.getUserAvatar();
         this.sharedService.clearInput$.subscribe(clear => {
             if (clear && this.searchData) { // Проверяем, что FormControl существует
                 this.searchData.reset(); // Сбрасываем значения FormControl
